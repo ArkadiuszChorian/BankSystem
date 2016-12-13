@@ -5,7 +5,6 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
-using MongoDB.Driver;
 using Service.Models;
 
 namespace Service
@@ -25,17 +24,21 @@ namespace Service
         public object GenerateId(object container, object document)
         {
             //var currentAccountId = long.Parse(currentAccountIdAsString);
-            var currentAccountIdAsString = DAL.Instance.Configurations.AsQueryable().First(config => config.Key == "CurrentAccountId").Value;
-            var currentAccountIdAsLong = long.Parse(currentAccountIdAsString);
+            var currentAccountIdConfigKeyValue = DAL.Instance.Configurations.First(config => config.Key == "CurrentAccountId");
+            //var currentAccountIdAsString = currentAccountIdConfigKeyValue.Value;
+            var currentAccountIdAsLong = long.Parse(currentAccountIdConfigKeyValue.Value);
             currentAccountIdAsLong++;
-            currentAccountIdAsString = currentAccountIdAsLong.ToString();
+            var currentAccountIdAsString = currentAccountIdAsLong.ToString();
 
             while (currentAccountIdAsString.Length < 16)
             {
                 currentAccountIdAsString = "0" + currentAccountIdAsString;
             }
-            
-            DAL.Instance.Configurations.UpdateOne(config => config.Key == "CurrentAccountId", Builders<ConfigKeyValue>.Update.Set("Value", currentAccountIdAsString));
+
+            currentAccountIdConfigKeyValue.Value = currentAccountIdAsString;
+
+            DAL.Instance.Configurations.Update(currentAccountIdConfigKeyValue);
+            //DAL.Instance.Configurations.Update(config => config.Key == "CurrentAccountId", Builders<ConfigKeyValue>.Update.Set("Value", currentAccountIdAsString));
 
             return currentAccountIdAsString;
         }

@@ -4,11 +4,12 @@ using System.Linq;
 using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using MongoRepository;
 
 namespace Service.Models
 {
     [DataContract]
-    public class Transfer : Operation
+    public class Transfer : Operation, IEntity<string>
     {
 
     }

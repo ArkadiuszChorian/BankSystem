@@ -5,12 +5,12 @@ using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson.Serialization.Attributes;
-using MongoDB.Bson.Serialization.IdGenerators;
+using MongoRepository;
 
 namespace Service.Models
 {
     [DataContract]
-    public class Account
+    public class Account : IEntity<string>
     {
         //public Account(){}
 

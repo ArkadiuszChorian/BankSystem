@@ -5,8 +5,6 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.Text;
 using System.Threading;
-using MongoDB.Bson;
-using MongoDB.Driver;
 using Service.Models;
 
 namespace Service
@@ -34,19 +32,19 @@ namespace Service
 
         public string CreateUser(User user)
         {
-            DAL.Instance.Users.InsertOne(user);
+            DAL.Instance.Users.Add(user);
 
             return "OK";
         }
 
         public string CreateAccount(User user)
         {
-            var userEntity = DAL.Instance.Users.AsQueryable().First(usr => usr.UserName == user.UserName);
+            var userEntity = DAL.Instance.Users.First(usr => usr.UserName == user.UserName);
             //DAL.Instance.Accounts.InsertOne(new Account(userEntity.Id));
-            DAL.Instance.Accounts.InsertOne(new Account
-            {
-                OwnerId = userEntity.Id
-            });
+            var newAccount = new Account {OwnerId = userEntity.Id};
+            DAL.Instance.Accounts.Add(newAccount);
+            userEntity.Accounts.Add(newAccount.Id);
+            DAL.Instance.Users.Update(userEntity);
 
             return "OK";
         }
@@ -54,8 +52,8 @@ namespace Service
         public string Transfer(Operation operation)
         {
             //var s = DAL.Instance.Configurations.AsQueryable().First(config => config.Key == "CurrentAccountId").Value;
-            var sourceAccount = DAL.Instance.Accounts.AsQueryable().Single(account => account.Id == operation.SourceId);
-            var destinationAccount = DAL.Instance.Accounts.AsQueryable().Single(account => account.Id == operation.DestinationId);
+            var sourceAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.SourceId);
+            var destinationAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.DestinationId);
             var operationInDestinationView = operation.Clone();
 
             operation.BalanceBefore = sourceAccount.Balance;
@@ -67,13 +65,14 @@ namespace Service
             operation.BalanceAfter = sourceAccount.Balance;
             operationInDestinationView.BalanceAfter = destinationAccount.Balance;
 
-            DAL.Instance.Operations.InsertOne(operation);
-            DAL.Instance.Operations.InsertOne(operationInDestinationView);
+            DAL.Instance.Operations.Add(operation);
+            DAL.Instance.Operations.Add(operationInDestinationView);
 
             sourceAccount.OperationsHistory.Add(operation.Id);
             destinationAccount.OperationsHistory.Add(operationInDestinationView.Id);
 
-            //DAL.Instance.Accounts
+            DAL.Instance.Accounts.Update(sourceAccount);
+            DAL.Instance.Accounts.Update(destinationAccount);
 
             return "OK";
         }

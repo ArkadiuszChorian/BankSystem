@@ -6,11 +6,12 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.IdGenerators;
+using MongoRepository;
 
 namespace Service.Models
 {
     [DataContract]
-    public class User
+    public class User : IEntity<string>
     {
         [DataMember]
         [BsonId(IdGenerator = typeof(StringObjectIdGenerator))]
