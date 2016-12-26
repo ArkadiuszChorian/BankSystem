@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "Register";
+}
+<h1>Login</h1>
+
+<form asp-controller="Identity" asp-action="Login" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+    <div>
+        <label>Username</label>
+        <input type="text" name="userName"/>
+    </div>
+    <div>
+        <label>Password</label>
+        <input type="password" name="password"/>
+
+    </div>
+    <div>
+        <input type="submit" value="Login" />
+    </div>
+</form>
+
+@*<form method="post" asp-controller="Identity" asp-action="Login">
+    <div>
+        <label asp-for="Username"></label>
+        <input asp-for="Username" />
+        <span asp-validation-for="Username"></span>
+    </div>
+
+    <div>
+        <label asp-for="Password"></label>
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+
+    <div>
+        <label asp-for="ConfirmPassword"></label>
+        <input asp-for="ConfirmPassword" />
+        <span asp-validation-for="ConfirmPassword"></span>
+    </div>
+
+    <div>
+        <input type="submit" value="Register" />
+    </div>
+
+</form>*@

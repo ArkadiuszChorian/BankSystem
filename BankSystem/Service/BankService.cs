@@ -12,22 +12,15 @@ namespace Service
     // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "BankService" in both code and config file together.
     public class BankService : IBankService
     {
-        public string GetData(int value)
+        public string AuthenticateUser(string userName, string password)
         {
-            return string.Format("You entered: {0}", value);
-        }
+            var user = DAL.Instance.Users.First(user2 => user2.UserName == userName);
+            if (user.Password == password)
+            {
+                return "OK";
+            }
 
-        public CompositeType GetDataUsingDataContract(CompositeType composite)
-        {
-            if (composite == null)
-            {
-                throw new ArgumentNullException("composite");
-            }
-            if (composite.BoolValue)
-            {
-                composite.StringValue += "Suffix";
-            }
-            return composite;
+            return "ERR";
         }
 
         public string CreateUser(User user)
@@ -82,7 +75,7 @@ namespace Service
             return "OK";
         }
 
-        public string RetriveTransfer(Operation operation)
+        public string RetrieveTransfer(Operation operation)
         {
             return "OK";
         }
