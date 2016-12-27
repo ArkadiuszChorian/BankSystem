@@ -29,6 +29,7 @@
       "frameworkAssemblies": {
         "System.Runtime.Serialization": "4.0.0.0",
         "System.ServiceModel": "4.0.0.0",
+        "System.Web": "4.0.0.0",
         "System.Xml": "4.0.0.0"
       }
     }

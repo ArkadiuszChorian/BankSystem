@@ -17,13 +17,15 @@ namespace Service
         [OperationContract]
         string AuthenticateUser(string userName, string password);
         [OperationContract]
-        string CreateUser(User user);
+        string RegisterUser(User user);
         [OperationContract]
         string CreateAccount(User user);
         [OperationContract]
         string Transfer(Operation operation);
         [OperationContract]
         string Payment(Operation operation);
+        [OperationContract]
+        IEnumerable<Operation> GetHistory(string accountId);
 
         //======= Service - Service (REST) 
         [OperationContract]

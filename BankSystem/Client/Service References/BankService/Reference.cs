@@ -199,8 +199,8 @@ namespace BankService
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/AuthenticateUser", ReplyAction="http://tempuri.org/IBankService/AuthenticateUserResponse")]
         System.Threading.Tasks.Task<string> AuthenticateUserAsync(string userName, string password);
         
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/CreateUser", ReplyAction="http://tempuri.org/IBankService/CreateUserResponse")]
-        System.Threading.Tasks.Task<string> CreateUserAsync(BankService.User user);
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/RegisterUser", ReplyAction="http://tempuri.org/IBankService/RegisterUserResponse")]
+        System.Threading.Tasks.Task<string> RegisterUserAsync(BankService.User user);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/CreateAccount", ReplyAction="http://tempuri.org/IBankService/CreateAccountResponse")]
         System.Threading.Tasks.Task<string> CreateAccountAsync(BankService.User user);
@@ -210,6 +210,9 @@ namespace BankService
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/Payment", ReplyAction="http://tempuri.org/IBankService/PaymentResponse")]
         System.Threading.Tasks.Task<string> PaymentAsync(BankService.Operation operation);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/GetHistory", ReplyAction="http://tempuri.org/IBankService/GetHistoryResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.List<BankService.Operation>> GetHistoryAsync(string accountId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/RetrieveTransfer", ReplyAction="http://tempuri.org/IBankService/RetrieveTransferResponse")]
         System.Threading.Tasks.Task<string> RetrieveTransferAsync(BankService.Operation operation);
@@ -270,9 +273,9 @@ namespace BankService
             return base.Channel.AuthenticateUserAsync(userName, password);
         }
         
-        public System.Threading.Tasks.Task<string> CreateUserAsync(BankService.User user)
+        public System.Threading.Tasks.Task<string> RegisterUserAsync(BankService.User user)
         {
-            return base.Channel.CreateUserAsync(user);
+            return base.Channel.RegisterUserAsync(user);
         }
         
         public System.Threading.Tasks.Task<string> CreateAccountAsync(BankService.User user)
@@ -288,6 +291,11 @@ namespace BankService
         public System.Threading.Tasks.Task<string> PaymentAsync(BankService.Operation operation)
         {
             return base.Channel.PaymentAsync(operation);
+        }
+        
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<BankService.Operation>> GetHistoryAsync(string accountId)
+        {
+            return base.Channel.GetHistoryAsync(accountId);
         }
         
         public System.Threading.Tasks.Task<string> RetrieveTransferAsync(BankService.Operation operation)

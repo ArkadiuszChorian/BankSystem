@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using BankService;
+using Client.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 
 // For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
@@ -20,20 +21,74 @@ namespace Client.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<RedirectResult> Logout(string returnUrl)
+        {
+            //var claims = new List<Claim> { new Claim(ClaimTypes.Name, loginViewModel.UserName) };
+
+            //var claimsIdentity = new ClaimsIdentity(claims, "password");
+            //var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
+
+            //var x = await HttpContext.Authentication.GetAuthenticateInfoAsync("Cookies");
+            //var z = x.Principal.Identity.Name;
+
+            //await HttpContext.Authentication.SignOutAsync("Cookies");
+            await HttpContext.Authentication.SignOutAsync();
+
+            return Redirect("/");
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Login(string userName, string password, string returnUrl)
+        public async Task<IActionResult> Login(LoginViewModel loginViewModel, string returnUrl)
         {
             var bankService = new BankServiceClient();
-            var serviceResponse = await bankService.AuthenticateUserAsync(userName, password);
+            var serviceResponse = await bankService.AuthenticateUserAsync(loginViewModel.UserName, loginViewModel.Password);
 
             if (serviceResponse == "OK")
             {
-                var claims = new List<Claim>{ new Claim(ClaimTypes.Name, userName) };
+                //var claims = new List<Claim>{ new Claim(ClaimTypes.Name, loginViewModel.UserName) };              
+                //var claimsIdentity = new ClaimsIdentity(claims);
+                //var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
 
-                var claimsIdentity = new ClaimsIdentity(claims, "password");
-                var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
+                //await HttpContext.Authentication.SignInAsync("Cookies", claimsPrinciple);
+                await HttpContext.Authentication.SignInAsync(loginViewModel.UserName);
 
-                await HttpContext.Authentication.SignInAsync("Cookies", claimsPrinciple);
+                if (Url.IsLocalUrl(returnUrl))
+                {
+                    return Redirect(returnUrl);
+                }
+
+                return Redirect("/");
+            }
+
+            return View();
+        }
+
+        [HttpGet]
+        public IActionResult Register(string returnUrl)
+        {
+            ViewData["ReturnUrl"] = returnUrl;
+            return View();
+        }
+
+        [HttpPost]
+        //public async Task<IActionResult> Register(string userName, string password, string returnUrl)
+        public async Task<IActionResult> Register(RegisterViewModel registerViewModel, string returnUrl)
+        {
+            var bankService = new BankServiceClient();
+            var newUser = new User {UserName = registerViewModel.UserName, Password = registerViewModel.Password};
+            var serviceResponse = await bankService.RegisterUserAsync(newUser);
+
+            if (serviceResponse == "OK")
+            {
+                //var claims = new List<Claim> { new Claim(ClaimTypes.Name, newUser.UserName) };
+
+                //var claimsIdentity = new ClaimsIdentity(claims, "password");
+                //var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
+
+                //await HttpContext.Authentication.SignInAsync("Cookies", claimsPrinciple);
+
+                await HttpContext.Authentication.SignInAsync(registerViewModel.UserName);
 
                 if (Url.IsLocalUrl(returnUrl))
                 {

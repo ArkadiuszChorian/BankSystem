@@ -2,27 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BankService;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers
 {
-    [Authorize]
+    //[Authorize]
     public class HomeController : Controller
     {
-        public IActionResult Index()
+        public IActionResult History()
         {
-            return View();
+            var bankService = new BankServiceClient();
+            var userName = HttpContext.Authentication.GetUserName();         
+
+            return View(new List<string> { "a", "b", "c" });
         }
 
-        public IActionResult About()
+        public IActionResult Transfer()
         {
             ViewData["Message"] = "Your application description page.";
 
             return View();
         }
 
-        public IActionResult Contact()
+        public IActionResult Payment()
         {
             ViewData["Message"] = "Your contact page.";
 

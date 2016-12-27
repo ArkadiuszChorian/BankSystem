@@ -23,7 +23,7 @@ namespace Service
             return "ERR";
         }
 
-        public string CreateUser(User user)
+        public string RegisterUser(User user)
         {
             DAL.Instance.Users.Add(user);
 
@@ -73,6 +73,18 @@ namespace Service
         public string Payment(Operation operation)
         {
             return "OK";
+        }
+
+        public IEnumerable<Operation> GetHistory(string accountId)
+        {
+            var account = DAL.Instance.Accounts.First(account2 => account2.Id == accountId);
+            var operations = new List<Operation>();
+            account.OperationsHistory.ForEach(operationId =>
+            {
+                operations.Add(DAL.Instance.Operations.First(operation => operation.Id == operationId));
+            });
+
+            return operations;
         }
 
         public string RetrieveTransfer(Operation operation)

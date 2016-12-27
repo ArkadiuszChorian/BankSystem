@@ -1,0 +1,47 @@
+﻿@model RegisterViewModel
+@{
+    ViewBag.Title = "Register";
+}
+<h1>Register</h1>
+
+<form asp-controller="Identity" asp-action="Register" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+    <div asp-validation-summary="ModelOnly"></div>
+
+    <div>
+        <label asp-for="UserName">User name</label>
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
+    </div>
+
+    <div>
+        <label asp-for="Password"></label>
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+
+    <div>
+        <label asp-for="ConfirmPassword">Confirm password</label>
+        <input asp-for="ConfirmPassword"/>
+        <span asp-validation-for="ConfirmPassword"></span>
+    </div>
+
+    <div>
+        <input type="submit" value="Register" />
+    </div> 
+
+    @*<div>
+        <input type="submit" value="Register" />
+    </div> 
+    <div>
+        <label>UserName</label>
+        <input type="text" name="userName"/>
+    </div>
+    <div>
+        <label>Password</label>
+        <input type="password" name="password"/>
+
+    </div>
+    <div>
+        <input type="submit" value="Register"/>
+    </div>*@
+</form>

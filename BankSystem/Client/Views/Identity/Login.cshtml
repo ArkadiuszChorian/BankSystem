@@ -1,11 +1,37 @@
-﻿@{
-    ViewBag.Title = "Register";
+﻿@model LoginViewModel
+@{
+    ViewBag.Title = "Login";
 }
 <h1>Login</h1>
 
 <form asp-controller="Identity" asp-action="Login" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+    <div asp-validation-summary="ModelOnly"></div>
+
     <div>
-        <label>Username</label>
+        <label asp-for="UserName">User name</label>
+        <input asp-for="UserName"/>
+        <span asp-validation-for="UserName"></span>
+    </div>
+
+    <div>
+        <label asp-for="Password"></label>
+        <input asp-for="Password"/>
+        <span asp-validation-for="Password"></span>
+    </div>
+
+    <div>
+        <input type="submit" value="Login"/>
+    </div>
+
+    <div>
+        <a asp-area="" asp-controller="Identity" asp-action="Register">Register</a>
+    </div>
+
+</form>
+
+@*<form asp-controller="Identity" asp-action="Login" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+    <div>
+        <label>UserName</label>
         <input type="text" name="userName"/>
     </div>
     <div>
@@ -16,13 +42,13 @@
     <div>
         <input type="submit" value="Login" />
     </div>
-</form>
+</form>*@
 
 @*<form method="post" asp-controller="Identity" asp-action="Login">
     <div>
-        <label asp-for="Username"></label>
-        <input asp-for="Username" />
-        <span asp-validation-for="Username"></span>
+        <label asp-for="UserName"></label>
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
     </div>
 
     <div>

@@ -19,6 +19,8 @@ namespace Service.Models
         [DataMember]
         public string Title { get; set; }
         [DataMember]
+        public DateTime DateTime { get; set; }
+        [DataMember]
         public string SourceId { get; set; }
         [DataMember]
         public string DestinationId { get; set; }
