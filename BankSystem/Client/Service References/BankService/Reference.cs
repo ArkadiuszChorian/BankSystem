@@ -14,28 +14,28 @@ namespace BankService
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "0.4.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="User", Namespace="http://schemas.datacontract.org/2004/07/Service.Models")]
-    public partial class User : object
+    [System.Runtime.Serialization.DataContractAttribute(Name="Account", Namespace="http://schemas.datacontract.org/2004/07/Service.Models")]
+    public partial class Account : object
     {
         
-        private System.Collections.Generic.List<string> AccountsField;
+        private decimal BalanceField;
         
         private string IdField;
         
-        private string PasswordField;
+        private System.Collections.Generic.List<string> OperationsHistoryField;
         
-        private string UserNameField;
+        private string OwnerIdField;
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public System.Collections.Generic.List<string> Accounts
+        public decimal Balance
         {
             get
             {
-                return this.AccountsField;
+                return this.BalanceField;
             }
             set
             {
-                this.AccountsField = value;
+                this.BalanceField = value;
             }
         }
         
@@ -53,28 +53,28 @@ namespace BankService
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string Password
+        public System.Collections.Generic.List<string> OperationsHistory
         {
             get
             {
-                return this.PasswordField;
+                return this.OperationsHistoryField;
             }
             set
             {
-                this.PasswordField = value;
+                this.OperationsHistoryField = value;
             }
         }
         
         [System.Runtime.Serialization.DataMemberAttribute()]
-        public string UserName
+        public string OwnerId
         {
             get
             {
-                return this.UserNameField;
+                return this.OwnerIdField;
             }
             set
             {
-                this.UserNameField = value;
+                this.OwnerIdField = value;
             }
         }
     }
@@ -90,6 +90,8 @@ namespace BankService
         private decimal BalanceAfterField;
         
         private decimal BalanceBeforeField;
+        
+        private System.DateTime DateTimeField;
         
         private string DestinationIdField;
         
@@ -135,6 +137,19 @@ namespace BankService
             set
             {
                 this.BalanceBeforeField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.DateTime DateTime
+        {
+            get
+            {
+                return this.DateTimeField;
+            }
+            set
+            {
+                this.DateTimeField = value;
             }
         }
         
@@ -191,10 +206,104 @@ namespace BankService
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "0.4.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="User", Namespace="http://schemas.datacontract.org/2004/07/Service.Models")]
+    public partial class User : object
+    {
+        
+        private System.Collections.Generic.List<string> AccountsField;
+        
+        private string IdField;
+        
+        private string PasswordField;
+        
+        private System.Collections.Generic.List<string> SessionsField;
+        
+        private string UserNameField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<string> Accounts
+        {
+            get
+            {
+                return this.AccountsField;
+            }
+            set
+            {
+                this.AccountsField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Id
+        {
+            get
+            {
+                return this.IdField;
+            }
+            set
+            {
+                this.IdField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string Password
+        {
+            get
+            {
+                return this.PasswordField;
+            }
+            set
+            {
+                this.PasswordField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public System.Collections.Generic.List<string> Sessions
+        {
+            get
+            {
+                return this.SessionsField;
+            }
+            set
+            {
+                this.SessionsField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string UserName
+        {
+            get
+            {
+                return this.UserNameField;
+            }
+            set
+            {
+                this.UserNameField = value;
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "0.4.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="BankService.IBankService")]
     public interface IBankService
     {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/GetAccounts", ReplyAction="http://tempuri.org/IBankService/GetAccountsResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.List<BankService.Account>> GetAccountsAsync(string sessionId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/GetAccountsIds", ReplyAction="http://tempuri.org/IBankService/GetAccountsIdsResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.List<string>> GetAccountsIdsAsync(string sessionId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/GetAccountHistory", ReplyAction="http://tempuri.org/IBankService/GetAccountHistoryResponse")]
+        System.Threading.Tasks.Task<System.Collections.Generic.List<BankService.Operation>> GetAccountHistoryAsync(string accountId);
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/GenerateSessionId", ReplyAction="http://tempuri.org/IBankService/GenerateSessionIdResponse")]
+        System.Threading.Tasks.Task<string> GenerateSessionIdAsync(string userName);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/AuthenticateUser", ReplyAction="http://tempuri.org/IBankService/AuthenticateUserResponse")]
         System.Threading.Tasks.Task<string> AuthenticateUserAsync(string userName, string password);
@@ -266,6 +375,26 @@ namespace BankService
         public BankServiceClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
                 base(binding, remoteAddress)
         {
+        }
+        
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<BankService.Account>> GetAccountsAsync(string sessionId)
+        {
+            return base.Channel.GetAccountsAsync(sessionId);
+        }
+        
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<string>> GetAccountsIdsAsync(string sessionId)
+        {
+            return base.Channel.GetAccountsIdsAsync(sessionId);
+        }
+        
+        public System.Threading.Tasks.Task<System.Collections.Generic.List<BankService.Operation>> GetAccountHistoryAsync(string accountId)
+        {
+            return base.Channel.GetAccountHistoryAsync(accountId);
+        }
+        
+        public System.Threading.Tasks.Task<string> GenerateSessionIdAsync(string userName)
+        {
+            return base.Channel.GenerateSessionIdAsync(userName);
         }
         
         public System.Threading.Tasks.Task<string> AuthenticateUserAsync(string userName, string password)

@@ -51,11 +51,13 @@ namespace Client.Controllers
                 //var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
 
                 //await HttpContext.Authentication.SignInAsync("Cookies", claimsPrinciple);
+                var sessionId = await bankService.GenerateSessionIdAsync(loginViewModel.UserName);
+
                 await HttpContext.Authentication.SignInAsync(loginViewModel.UserName);
 
                 if (Url.IsLocalUrl(returnUrl))
                 {
-                    return Redirect(returnUrl);
+                    return Redirect(returnUrl);                  
                 }
 
                 return Redirect("/");

@@ -21,6 +21,8 @@ namespace Service.Models
         [DataMember]
         public string Password { get; set; }
         [DataMember]
+        public List<string> Sessions { get; set; } = new List<string>();
+        [DataMember]
         public List<string> Accounts { get; set; } = new List<string>();
     }
 }

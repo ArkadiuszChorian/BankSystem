@@ -55,7 +55,8 @@
     <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AccountIdGenerator.cs" />
+    <Compile Include="Models\Session.cs" />
+    <Compile Include="Providers\AccountIdGenerator.cs" />
     <Compile Include="DAL.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\ConfigKeyValue.cs" />
@@ -66,6 +67,7 @@
     <Compile Include="BankService.cs" />
     <Compile Include="Models\Transfer.cs" />
     <Compile Include="Models\User.cs" />
+    <Compile Include="Providers\SessionIdGenerator.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

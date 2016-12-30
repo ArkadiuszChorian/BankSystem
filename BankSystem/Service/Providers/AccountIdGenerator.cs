@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using MongoDB.Bson;
+﻿using System.Linq;
 using MongoDB.Bson.Serialization;
-using Service.Models;
 
-namespace Service
+namespace Service.Providers
 {
     public class AccountIdGenerator : IIdGenerator
     {

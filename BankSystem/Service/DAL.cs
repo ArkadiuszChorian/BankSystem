@@ -29,9 +29,19 @@ namespace Service
                 });
             }
 
+            if (!Configurations.Exists(config => config.Key == "CurrentSessionId"))
+            {
+                Configurations.Add(new ConfigKeyValue
+                {
+                    Key = "CurrentSessionId",
+                    Value = "0000000000000000"
+                });
+            }
+
             Users = new MongoRepository<User, string>();
             Accounts = new MongoRepository<Account, string>();
             Operations = new MongoRepository<Operation, string>();
+            Sessions = new MongoRepository<Session, string>();
 
             //Client = new MongoClient(ConfigurationManager.ConnectionStrings["MongoDB"].ConnectionString);
             //Database = Client.GetDatabase("banksystem");
@@ -62,6 +72,7 @@ namespace Service
         public MongoRepository<User, string> Users { get; set; }
         public MongoRepository<Account, string> Accounts { get; set; }
         public MongoRepository<Operation, string> Operations { get; set; }
+        public MongoRepository<Session, string> Sessions { get; set; }
         public MongoRepository<ConfigKeyValue, string> Configurations { get; set; }
 
         //public static IMongoCollection<Artist> Artists;

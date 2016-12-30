@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoRepository;
+using Service.Providers;
 
 namespace Service.Models
 {

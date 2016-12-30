@@ -8,15 +8,25 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Client.Controllers
 {
-    //[Authorize]
+    [Authorize]
     public class HomeController : Controller
     {
-        public IActionResult History()
+        public async Task<IActionResult> Overview()
         {
             var bankService = new BankServiceClient();
-            var userName = HttpContext.Authentication.GetUserName();         
+            var sessionId = await HttpContext.Authentication.GetSessionId();
+            //Todo
+            //Get accounts!
+            var accounts = await bankService.GetAccountsAsync(sessionId);
 
-            return View(new List<string> { "a", "b", "c" });
+            return View(accounts);
+        }
+        public IActionResult History()
+        {
+            //var bankService = new BankServiceClient();
+            //var userName = HttpContext.Authentication.GetSessionId();         
+
+            return View();
         }
 
         public IActionResult Transfer()

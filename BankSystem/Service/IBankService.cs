@@ -15,6 +15,14 @@ namespace Service
     {
         //======= Client - Service (SOAP) 
         [OperationContract]
+        List<Account> GetAccounts(string sessionId);
+        [OperationContract]
+        List<string> GetAccountsIds(string sessionId);
+        [OperationContract]
+        List<Operation> GetAccountHistory(string accountId);
+        [OperationContract]
+        string GenerateSessionId(string userName);
+        [OperationContract]
         string AuthenticateUser(string userName, string password);
         [OperationContract]
         string RegisterUser(User user);
@@ -24,8 +32,6 @@ namespace Service
         string Transfer(Operation operation);
         [OperationContract]
         string Payment(Operation operation);
-        [OperationContract]
-        IEnumerable<Operation> GetHistory(string accountId);
 
         //======= Service - Service (REST) 
         [OperationContract]
