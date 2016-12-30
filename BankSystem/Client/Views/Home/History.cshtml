@@ -1,4 +1,5 @@
-﻿@{
+﻿@using BankService
+@{
     ViewData["Title"] = "Home Page";
 }
 
@@ -107,3 +108,14 @@
         </ul>
     </div>
 </div>
+
+@{
+    var operations = (List<Operation>)Model;
+
+    foreach (var operation in operations)
+    {
+        <div>
+            Kwota: @operation.Amount, Od: @operation.SourceId, Do: @operation.DestinationId
+        </div>
+    }
+}

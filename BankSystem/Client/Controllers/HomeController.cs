@@ -21,12 +21,13 @@ namespace Client.Controllers
 
             return View(accounts);
         }
-        public IActionResult History()
+        public async Task<IActionResult> History(string accountId)
         {
-            //var bankService = new BankServiceClient();
-            //var userName = HttpContext.Authentication.GetSessionId();         
+            var bankService = new BankServiceClient();
+            //var userName = HttpContext.Authentication.GetSessionId();      
+            var operations = await bankService.GetAccountHistoryAsync(accountId);
 
-            return View();
+            return View(operations);
         }
 
         public IActionResult Transfer()
