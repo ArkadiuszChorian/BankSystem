@@ -53,7 +53,7 @@ namespace Client.Controllers
                 //await HttpContext.Authentication.SignInAsync("Cookies", claimsPrinciple);
                 var sessionId = await bankService.GenerateSessionIdAsync(loginViewModel.UserName);
 
-                await HttpContext.Authentication.SignInAsync(loginViewModel.UserName);
+                await HttpContext.Authentication.SignInAsync(sessionId);
 
                 if (Url.IsLocalUrl(returnUrl))
                 {

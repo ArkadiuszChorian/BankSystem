@@ -12,8 +12,8 @@ namespace Client
         private const string AuthenticationMiddlewareName = "Cookies";
         public static Task SignInAsync(this AuthenticationManager authenticationManager, string sessionId)
         {
-            var claims = new List<Claim> { new Claim(ClaimTypes.Name, sessionId) };
-            var claimsIdentity = new ClaimsIdentity(claims);
+            var claims = new List<Claim> { new Claim(ClaimTypes.Sid, sessionId) };
+            var claimsIdentity = new ClaimsIdentity(claims, AuthenticationTypes.Password);
             var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
 
             return authenticationManager.SignInAsync(AuthenticationMiddlewareName, claimsPrinciple);
@@ -21,7 +21,7 @@ namespace Client
 
         public static Task SignOutAsync(this AuthenticationManager authenticationManager)
         {
-            return authenticationManager.SignInAsync(AuthenticationMiddlewareName);
+            return authenticationManager.SignOutAsync(AuthenticationMiddlewareName);
         }
 
         public static async Task<string> GetSessionId(this AuthenticationManager authenticationManager)
