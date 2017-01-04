@@ -1,18 +1,27 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Mime;
 using System.Runtime.Serialization;
 using System.ServiceModel;
+using System.ServiceModel.Web;
 using System.Text;
 using System.Threading;
+using System.Web;
+using System.Web.UI.WebControls;
+using Microsoft.AspNetCore.Mvc;
 using Service.Models;
 using Service.Providers;
 
 namespace Service
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the class name "BankService" in both code and config file together.
-    public class BankService : IBankService
+    public class BankService : IBankService, IBankServiceWeb
     {
+        public AccountIdAnalyzer AccountIdAnalyzer { get; set; } = new AccountIdAnalyzer();
+        public TransferAndPaymentManager TransferAndPaymentManager { get; set; } = new TransferAndPaymentManager();
+
         public List<Account> GetAccounts(string sessionId)
         {
             var session = DAL.Instance.Sessions.First(session2 => session2.SessionId == sessionId);
@@ -92,6 +101,8 @@ namespace Service
         public string Transfer(Operation operation)
         {
             //var s = DAL.Instance.Configurations.AsQueryable().First(config => config.Key == "CurrentAccountId").Value;
+            AccountIdAnalyzer.IsInternalAccount(operation.DestinationId);
+
             var sourceAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.SourceId);
             var destinationAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.DestinationId);
             var operationInDestinationView = operation.Clone();
@@ -122,8 +133,32 @@ namespace Service
             return "OK";
         }
 
-        public string RetrieveTransfer(Operation operation)
+        //public HttpResponseMessage ReceiveExternalTransfer(string id, int amount, string from, string title)
+        public string ReceiveExternalTransfer(string id, ExternalOperation externalOperation)
         {
+            //var reminder = amount % 10;
+            //amount /= 10;
+            //reminder += 10 * (amount % 10);
+            //amount /= 10;
+
+            //var decimalTotalAmount = amount + ((decimal) reminder) / 100;
+
+            //var operation = new Operation
+            //{
+            //    Amount = decimalTotalAmount,
+            //    DateTime = DateTime.Now,
+            //    DestinationId = id,
+            //    SourceId = from,
+            //    Title = title
+            //};
+
+            var webContext = WebOperationContext.Current;
+            webContext.OutgoingResponse.StatusCode = HttpStatusCode.Created;
+
+            var operation = new Operation(externalOperation, id);  
+            
+            TransferAndPaymentManager.ReceiveExternalTransfer(operation);       
+
             return "OK";
         }
     }

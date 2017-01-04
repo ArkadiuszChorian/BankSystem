@@ -9,7 +9,7 @@ using MongoRepository;
 namespace Service.Models
 {
     [DataContract]
-    public class Payment : Operation, IEntity<string>
+    public class Payment// : Operation, IEntity<string>
     {
 
     }

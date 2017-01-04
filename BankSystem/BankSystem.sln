@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MongoRepository.Net45", "Mo
 EndProject
 Project("{8BB2217D-0F2D-49D1-97BC-3654ED321F3B}") = "Client", "Client\Client.xproj", "{2E007299-1DBF-419A-9365-3649DAA61F3B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Service.Tests", "Service.Tests\Service.Tests.csproj", "{46CFD07D-5F9C-427F-A86B-8A1B08BDE9CC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{2E007299-1DBF-419A-9365-3649DAA61F3B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E007299-1DBF-419A-9365-3649DAA61F3B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E007299-1DBF-419A-9365-3649DAA61F3B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46CFD07D-5F9C-427F-A86B-8A1B08BDE9CC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46CFD07D-5F9C-427F-A86B-8A1B08BDE9CC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46CFD07D-5F9C-427F-A86B-8A1B08BDE9CC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46CFD07D-5F9C-427F-A86B-8A1B08BDE9CC}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

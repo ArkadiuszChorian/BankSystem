@@ -34,8 +34,8 @@ namespace Service
         string Payment(Operation operation);
 
         //======= Service - Service (REST) 
-        [OperationContract]
-        [WebGet(UriTemplate = "/transfer", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        string RetrieveTransfer(Operation operation);
+        //[OperationContract]
+        //[WebInvoke(Method = "POST", UriTemplate = "/accounts/{id}", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.Wrapped)]
+        //string ReceiveExternalTransfer(string id, int amount, string from, string title);
     }
 }
