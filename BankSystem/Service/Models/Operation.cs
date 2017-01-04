@@ -44,7 +44,6 @@ namespace Service.Models
         public decimal BalanceBefore { get; set; }
         [DataMember]
         public decimal BalanceAfter { get; set; }
-
         public Operation Clone()
         {
             return (Operation)MemberwiseClone();

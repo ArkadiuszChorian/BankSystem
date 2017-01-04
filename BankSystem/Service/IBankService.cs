@@ -5,6 +5,7 @@ using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
+using System.Threading.Tasks;
 using Service.Models;
 
 namespace Service
@@ -29,7 +30,7 @@ namespace Service
         [OperationContract]
         string CreateAccount(User user);
         [OperationContract]
-        string Transfer(Operation operation);
+        Task<string> Transfer(Operation operation);
         [OperationContract]
         string Payment(Operation operation);
 

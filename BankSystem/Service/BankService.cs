@@ -9,6 +9,7 @@ using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI.WebControls;
 using Microsoft.AspNetCore.Mvc;
@@ -98,38 +99,54 @@ namespace Service
             return "OK";
         }
 
-        public string Transfer(Operation operation)
+        public async Task<string> Transfer(Operation operation)
         {
             //var s = DAL.Instance.Configurations.AsQueryable().First(config => config.Key == "CurrentAccountId").Value;
-            AccountIdAnalyzer.IsInternalAccount(operation.DestinationId);
+            if (AccountIdAnalyzer.IsInternalAccount(operation.DestinationId))
+            {
+                TransferAndPaymentManager.ExecuteInternalTransfer(operation);
+            }
+            else
+            {
+                await TransferAndPaymentManager.ExecuteExternalTransfer(operation);
+            }                  
 
-            var sourceAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.SourceId);
-            var destinationAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.DestinationId);
-            var operationInDestinationView = operation.Clone();
+            //var sourceAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.SourceId);
+            //var destinationAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.DestinationId);
+            //var operationInDestinationView = operation.Clone();
 
-            operation.BalanceBefore = sourceAccount.Balance;
-            operationInDestinationView.BalanceBefore = destinationAccount.Balance;
+            //operation.BalanceBefore = sourceAccount.Balance;
+            //operationInDestinationView.BalanceBefore = destinationAccount.Balance;
 
-            sourceAccount.Balance -= operation.Amount;
-            destinationAccount.Balance += operation.Amount;
+            //sourceAccount.Balance -= operation.Amount;
+            //destinationAccount.Balance += operation.Amount;
 
-            operation.BalanceAfter = sourceAccount.Balance;
-            operationInDestinationView.BalanceAfter = destinationAccount.Balance;
+            //operation.BalanceAfter = sourceAccount.Balance;
+            //operationInDestinationView.BalanceAfter = destinationAccount.Balance;
 
-            DAL.Instance.Operations.Add(operation);
-            DAL.Instance.Operations.Add(operationInDestinationView);
+            //DAL.Instance.Operations.Add(operation);
+            //DAL.Instance.Operations.Add(operationInDestinationView);
 
-            sourceAccount.OperationsHistory.Add(operation.Id);
-            destinationAccount.OperationsHistory.Add(operationInDestinationView.Id);
+            //sourceAccount.OperationsHistory.Add(operation.Id);
+            //destinationAccount.OperationsHistory.Add(operationInDestinationView.Id);
 
-            DAL.Instance.Accounts.Update(sourceAccount);
-            DAL.Instance.Accounts.Update(destinationAccount);
+            //DAL.Instance.Accounts.Update(sourceAccount);
+            //DAL.Instance.Accounts.Update(destinationAccount);
 
             return "OK";
         }
 
         public string Payment(Operation operation)
         {
+            if (AccountIdAnalyzer.IsValidId(operation.DestinationId))
+            {
+                TransferAndPaymentManager.ExecuteGainingOperation(operation);
+            }
+            else
+            {
+                TransferAndPaymentManager.ExecuteSpendingOperation(operation);
+            }
+
             return "OK";
         }
 
@@ -157,7 +174,7 @@ namespace Service
 
             var operation = new Operation(externalOperation, id);  
             
-            TransferAndPaymentManager.ReceiveExternalTransfer(operation);       
+            TransferAndPaymentManager.ExecuteGainingOperation(operation);
 
             return "OK";
         }

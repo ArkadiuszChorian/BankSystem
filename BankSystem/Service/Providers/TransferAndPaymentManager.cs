@@ -14,27 +14,30 @@ namespace Service.Providers
     {
         public void ExecuteInternalTransfer(Operation operation)
         {
-            var sourceAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.SourceId);
-            var destinationAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.DestinationId);
-            var operationInDestinationView = operation.Clone();
+            //var sourceAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.SourceId);
+            //var destinationAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.DestinationId);
+            //var operationInDestinationView = operation.Clone();
 
-            operation.BalanceBefore = sourceAccount.Balance;
-            operationInDestinationView.BalanceBefore = destinationAccount.Balance;
+            //operation.BalanceBefore = sourceAccount.Balance;
+            //operationInDestinationView.BalanceBefore = destinationAccount.Balance;
 
-            sourceAccount.Balance -= operation.Amount;
-            destinationAccount.Balance += operation.Amount;
+            //sourceAccount.Balance -= operation.Amount;
+            //destinationAccount.Balance += operation.Amount;
 
-            operation.BalanceAfter = sourceAccount.Balance;
-            operationInDestinationView.BalanceAfter = destinationAccount.Balance;
+            //operation.BalanceAfter = sourceAccount.Balance;
+            //operationInDestinationView.BalanceAfter = destinationAccount.Balance;
 
-            DAL.Instance.Operations.Add(operation);
-            DAL.Instance.Operations.Add(operationInDestinationView);
+            //DAL.Instance.Operations.Add(operation);
+            //DAL.Instance.Operations.Add(operationInDestinationView);
 
-            sourceAccount.OperationsHistory.Add(operation.Id);
-            destinationAccount.OperationsHistory.Add(operationInDestinationView.Id);
+            //sourceAccount.OperationsHistory.Add(operation.Id);
+            //destinationAccount.OperationsHistory.Add(operationInDestinationView.Id);
 
-            DAL.Instance.Accounts.Update(sourceAccount);
-            DAL.Instance.Accounts.Update(destinationAccount);
+            //DAL.Instance.Accounts.Update(sourceAccount);
+            //DAL.Instance.Accounts.Update(destinationAccount);
+
+            ExecuteSpendingOperation(operation.Clone());
+            ExecuteGainingOperation(operation.Clone());
         }
 
         public async Task ExecuteExternalTransfer(Operation operation)
@@ -56,46 +59,105 @@ namespace Service.Providers
 
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
-                    var sourceAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.SourceId);
+                    //var sourceAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.SourceId);
 
-                    operation.BalanceBefore = sourceAccount.Balance;
-                    sourceAccount.Balance -= operation.Amount;
-                    operation.BalanceAfter = sourceAccount.Balance;
+                    //operation.BalanceBefore = sourceAccount.Balance;
+                    //sourceAccount.Balance -= operation.Amount;
+                    //operation.BalanceAfter = sourceAccount.Balance;
 
-                    DAL.Instance.Operations.Add(operation);
+                    //DAL.Instance.Operations.Add(operation);
 
-                    sourceAccount.OperationsHistory.Add(operation.Id);
+                    //sourceAccount.OperationsHistory.Add(operation.Id);
 
-                    DAL.Instance.Accounts.Update(sourceAccount);
+                    //DAL.Instance.Accounts.Update(sourceAccount);
+
+                    ExecuteSpendingOperation(operation);
                 }
 
                 var responseString = await response.Content.ReadAsStringAsync();
             }
         }
 
-        public void ExecuteOutcomingPayment(Operation operation)
-        {
-            
-        }
+        //public void ExecuteOutcomingPayment(Operation operation)
+        //{
+        //    var sourceAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.SourceId);
 
-        public void ExecuteIncomingPayment(Operation operation)
-        {
-            
-        }
+        //    operation.BalanceBefore = sourceAccount.Balance;
+        //    sourceAccount.Balance -= operation.Amount;
+        //    operation.BalanceAfter = sourceAccount.Balance;
 
-        public void ReceiveExternalTransfer(Operation operation)
+        //    DAL.Instance.Operations.Add(operation);
+
+        //    sourceAccount.OperationsHistory.Add(operation.Id);
+
+        //    DAL.Instance.Accounts.Update(sourceAccount);
+        //}
+
+        //public void ExecuteIncomingPayment(Operation operation)
+        //{
+        //    var destinationAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.DestinationId);
+
+        //    operation.BalanceBefore = destinationAccount.Balance;
+        //    destinationAccount.Balance += operation.Amount;
+        //    operation.BalanceAfter = destinationAccount.Balance;
+
+        //    DAL.Instance.Operations.Add(operation);
+
+        //    destinationAccount.OperationsHistory.Add(operation.Id);
+
+        //    DAL.Instance.Accounts.Update(destinationAccount);
+            
+        //}
+
+        //public void ReceiveExternalTransfer(Operation operation)
+        //{
+        //    var destinationAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.DestinationId);
+
+        //    ExecuteOperation(operation, destinationAccount, true);
+
+        //    //operation.BalanceBefore = destinationAccount.Balance;
+        //    //destinationAccount.Balance += operation.Amount;
+        //    //operation.BalanceAfter = destinationAccount.Balance;
+
+        //    //DAL.Instance.Operations.Add(operation);
+
+        //    //destinationAccount.OperationsHistory.Add(operation.Id);
+
+        //    //DAL.Instance.Accounts.Update(destinationAccount);
+        //}
+
+        public void ExecuteGainingOperation(Operation operation)
         {
             var destinationAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.DestinationId);
+            ExecuteOperation(operation, destinationAccount, true);
+        }
 
-            operation.BalanceBefore = destinationAccount.Balance;
-            destinationAccount.Balance += operation.Amount;
-            operation.BalanceAfter = destinationAccount.Balance;
+        public void ExecuteSpendingOperation(Operation operation)
+        {
+            var sourceAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.SourceId);
+            ExecuteOperation(operation, sourceAccount, false);
+        }
+
+        private void ExecuteOperation(Operation operation, Account account, bool isGaingingOperation)
+        {
+            operation.BalanceBefore = account.Balance;
+
+            if (isGaingingOperation)
+            {
+                account.Balance += operation.Amount;
+            }
+            else
+            {
+                account.Balance -= operation.Amount;
+            }
+            
+            operation.BalanceAfter = account.Balance;
 
             DAL.Instance.Operations.Add(operation);
 
-            destinationAccount.OperationsHistory.Add(operation.Id);
+            account.OperationsHistory.Add(operation.Id);
 
-            DAL.Instance.Accounts.Update(destinationAccount);
+            DAL.Instance.Accounts.Update(account);
         }
     }
 }
