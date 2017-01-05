@@ -288,6 +288,58 @@ namespace BankService
         }
     }
     
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "0.4.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ExternalOperation", Namespace="http://schemas.datacontract.org/2004/07/Service.Models")]
+    public partial class ExternalOperation : object
+    {
+        
+        private int amountField;
+        
+        private string fromField;
+        
+        private string titleField;
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public int amount
+        {
+            get
+            {
+                return this.amountField;
+            }
+            set
+            {
+                this.amountField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string from
+        {
+            get
+            {
+                return this.fromField;
+            }
+            set
+            {
+                this.fromField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute()]
+        public string title
+        {
+            get
+            {
+                return this.titleField;
+            }
+            set
+            {
+                this.titleField = value;
+            }
+        }
+    }
+    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "0.4.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="BankService.IBankService")]
     public interface IBankService
@@ -312,19 +364,13 @@ namespace BankService
         System.Threading.Tasks.Task<string> RegisterUserAsync(BankService.User user);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/CreateAccount", ReplyAction="http://tempuri.org/IBankService/CreateAccountResponse")]
-        System.Threading.Tasks.Task<string> CreateAccountAsync(BankService.User user);
+        System.Threading.Tasks.Task<string> CreateAccountAsync(string sessionId);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/Transfer", ReplyAction="http://tempuri.org/IBankService/TransferResponse")]
         System.Threading.Tasks.Task<string> TransferAsync(BankService.Operation operation);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/Payment", ReplyAction="http://tempuri.org/IBankService/PaymentResponse")]
         System.Threading.Tasks.Task<string> PaymentAsync(BankService.Operation operation);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/GetHistory", ReplyAction="http://tempuri.org/IBankService/GetHistoryResponse")]
-        System.Threading.Tasks.Task<System.Collections.Generic.List<BankService.Operation>> GetHistoryAsync(string accountId);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/RetrieveTransfer", ReplyAction="http://tempuri.org/IBankService/RetrieveTransferResponse")]
-        System.Threading.Tasks.Task<string> RetrieveTransferAsync(BankService.Operation operation);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "0.4.0.0")]
@@ -407,9 +453,9 @@ namespace BankService
             return base.Channel.RegisterUserAsync(user);
         }
         
-        public System.Threading.Tasks.Task<string> CreateAccountAsync(BankService.User user)
+        public System.Threading.Tasks.Task<string> CreateAccountAsync(string sessionId)
         {
-            return base.Channel.CreateAccountAsync(user);
+            return base.Channel.CreateAccountAsync(sessionId);
         }
         
         public System.Threading.Tasks.Task<string> TransferAsync(BankService.Operation operation)
@@ -420,16 +466,6 @@ namespace BankService
         public System.Threading.Tasks.Task<string> PaymentAsync(BankService.Operation operation)
         {
             return base.Channel.PaymentAsync(operation);
-        }
-        
-        public System.Threading.Tasks.Task<System.Collections.Generic.List<BankService.Operation>> GetHistoryAsync(string accountId)
-        {
-            return base.Channel.GetHistoryAsync(accountId);
-        }
-        
-        public System.Threading.Tasks.Task<string> RetrieveTransferAsync(BankService.Operation operation)
-        {
-            return base.Channel.RetrieveTransferAsync(operation);
         }
         
         public virtual System.Threading.Tasks.Task OpenAsync()
@@ -460,7 +496,7 @@ namespace BankService
         {
             if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_IBankService))
             {
-                return new System.ServiceModel.EndpointAddress("http://localhost:8733/Design_Time_Addresses/Service/BankService/");
+                return new System.ServiceModel.EndpointAddress("http://192.168.1.11:8733/BankService/");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }
@@ -479,6 +515,46 @@ namespace BankService
         {
             
             BasicHttpBinding_IBankService,
+        }
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "0.4.0.0")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="BankService.IBankServiceWeb")]
+    public interface IBankServiceWeb
+    {
+        
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankServiceWeb/ReceiveExternalTransfer", ReplyAction="http://tempuri.org/IBankServiceWeb/ReceiveExternalTransferResponse")]
+        System.Threading.Tasks.Task<string> ReceiveExternalTransferAsync(string id, BankService.ExternalOperation externalOperation);
+    }
+    
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "0.4.0.0")]
+    public interface IBankServiceWebChannel : BankService.IBankServiceWeb, System.ServiceModel.IClientChannel
+    {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "0.4.0.0")]
+    public partial class BankServiceWebClient : System.ServiceModel.ClientBase<BankService.IBankServiceWeb>, BankService.IBankServiceWeb
+    {
+        
+        public BankServiceWebClient(System.ServiceModel.Channels.Binding binding, System.ServiceModel.EndpointAddress remoteAddress) : 
+                base(binding, remoteAddress)
+        {
+        }
+        
+        public System.Threading.Tasks.Task<string> ReceiveExternalTransferAsync(string id, BankService.ExternalOperation externalOperation)
+        {
+            return base.Channel.ReceiveExternalTransferAsync(id, externalOperation);
+        }
+        
+        public virtual System.Threading.Tasks.Task OpenAsync()
+        {
+            return System.Threading.Tasks.Task.Factory.FromAsync(((System.ServiceModel.ICommunicationObject)(this)).BeginOpen(null, null), new System.Action<System.IAsyncResult>(((System.ServiceModel.ICommunicationObject)(this)).EndOpen));
+        }
+        
+        public virtual System.Threading.Tasks.Task CloseAsync()
+        {
+            return System.Threading.Tasks.Task.Factory.FromAsync(((System.ServiceModel.ICommunicationObject)(this)).BeginClose(null, null), new System.Action<System.IAsyncResult>(((System.ServiceModel.ICommunicationObject)(this)).EndClose));
         }
     }
 }

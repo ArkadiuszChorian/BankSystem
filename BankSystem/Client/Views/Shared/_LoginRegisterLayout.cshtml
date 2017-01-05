@@ -28,14 +28,6 @@
                 </button>
                 <a asp-area="" asp-controller="Home" asp-action="Overview" class="navbar-brand">Bank</a>
             </div>
-            <div class="navbar-collapse collapse">
-                <ul class="nav navbar-nav">
-                    <li><a asp-area="" asp-controller="Home" asp-action="Overview">Overview</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Transfer">Transfer</a></li>
-                    <li><a asp-area="" asp-controller="Home" asp-action="Payment">Payment</a></li>
-                    <li><a asp-area="" asp-controller="Identity" asp-action="Logout">Logout</a></li>
-                </ul>
-            </div>
         </div>
     </div>
     <div class="container body-content">
@@ -66,3 +58,4 @@
     @RenderSection("scripts", required: false)
 </body>
 </html>
+

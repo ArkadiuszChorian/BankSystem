@@ -87,14 +87,17 @@ namespace Service
             return "OK";
         }
 
-        public string CreateAccount(User user)
+        //public string CreateAccount(User user)
+        public string CreateAccount(string sessionId)
         {
-            var userEntity = DAL.Instance.Users.First(usr => usr.UserName == user.UserName);
+            //var userEntity = DAL.Instance.Users.First(usr => usr.UserName == user.UserName);
+            var session = DAL.Instance.Sessions.First(session2 => session2.SessionId == sessionId);
+            var user = DAL.Instance.Users.First(user2 => user2.Id == session.UserId);
             //DAL.Instance.Accounts.InsertOne(new Account(userEntity.Id));
-            var newAccount = new Account { OwnerId = userEntity.Id };
+            var newAccount = new Account { OwnerId = user.Id };
             DAL.Instance.Accounts.Add(newAccount);
-            userEntity.Accounts.Add(newAccount.Id);
-            DAL.Instance.Users.Update(userEntity);
+            user.Accounts.Add(newAccount.Id);
+            DAL.Instance.Users.Update(user);
 
             return "OK";
         }

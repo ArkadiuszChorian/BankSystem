@@ -28,7 +28,8 @@ namespace Service
         [OperationContract]
         string RegisterUser(User user);
         [OperationContract]
-        string CreateAccount(User user);
+        //string CreateAccount(User user);
+        string CreateAccount(string sessionId);
         [OperationContract]
         Task<string> Transfer(Operation operation);
         [OperationContract]

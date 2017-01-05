@@ -9,7 +9,15 @@
     {
         <div>
             Konto: @account.Id, Bilans: @account.Balance
-            <a asp-area="" asp-controller="Home" asp-action="History" asp-route-accountId="@account.Id">History</a>
+            @*<a asp-area="" asp-controller="Home" asp-action="History" asp-route-accountId="@account.Id">History</a>
+            <a asp-area="" asp-controller="Home" asp-action="History" asp-route-accountId="@account.Id">Transfer</a>
+            <a asp-area="" asp-controller="Home" asp-action="History" asp-route-accountId="@account.Id">Payment</a>*@
+            <a asp-area="" asp-controller="Home" asp-action="History" asp-route-id="@account.Id">History</a>
+            <a asp-area="" asp-controller="Home" asp-action="Transfer" asp-route-id="@account.Id">Transfer</a>
+            <a asp-area="" asp-controller="Home" asp-action="History" asp-route-id="@account.Id">Payment</a>
+            <a asp-area="" asp-controller="Home" asp-action="History" asp-route-id="@account.Id">Payment</a>
         </div>
     }
+
+    <a asp-area="" asp-controller="Home" asp-action="CreateAccount">Create account</a>
 }

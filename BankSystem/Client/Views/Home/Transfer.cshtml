@@ -1,17 +1,32 @@
-﻿@{
-    ViewData["Title"] = "Contact";
+﻿@model TransferViewModel
+@{
+    ViewBag.Title = "Transfer";
 }
-<h2>@ViewData["Title"].</h2>
-<h3>@ViewData["Message"]</h3>
+<h1>Transfer</h1>
 
-<address>
-    One Microsoft Way<br />
-    Redmond, WA 98052-6399<br />
-    <abbr title="Phone">P:</abbr>
-    425.555.0100
-</address>
+<form asp-controller="Home" asp-action="Transfer" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]" asp-route-sourceId="@ViewData["Id"]">
+    <div asp-validation-summary="ModelOnly"></div>
 
-<address>
-    <strong>Support:</strong> <a href="mailto:Support@example.com">Support@example.com</a><br />
-    <strong>Marketing:</strong> <a href="mailto:Marketing@example.com">Marketing@example.com</a>
-</address>
+    <div>
+        <label asp-for="DestinationId">Account number</label>
+        <input asp-for="DestinationId" />
+        <span asp-validation-for="DestinationId"></span>
+    </div>
+
+    <div>
+        <label asp-for="Amount"></label>
+        <input asp-for="Amount" />
+        <span asp-validation-for="Amount"></span>
+    </div>
+    
+    <div>
+        <label asp-for="Title"></label>
+        <input asp-for="Title" />
+        <span asp-validation-for="Title"></span>
+    </div>
+
+    <div>
+        <input type="submit" value="Transfer" />
+    </div>
+
+</form>

@@ -78,8 +78,16 @@ namespace Client.Controllers
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel, string returnUrl)
         {
             var bankService = new BankServiceClient();
-            var newUser = new User {UserName = registerViewModel.UserName, Password = registerViewModel.Password};
+            var newUser = new User
+            {
+                UserName = registerViewModel.UserName,
+                Password = registerViewModel.Password,
+                Sessions = new List<string>(),
+                Accounts = new List<string>()
+            };
+
             var serviceResponse = await bankService.RegisterUserAsync(newUser);
+            var sessionId = await bankService.GenerateSessionIdAsync(registerViewModel.UserName);
 
             if (serviceResponse == "OK")
             {
@@ -90,7 +98,8 @@ namespace Client.Controllers
 
                 //await HttpContext.Authentication.SignInAsync("Cookies", claimsPrinciple);
 
-                await HttpContext.Authentication.SignInAsync(registerViewModel.UserName);
+                //await HttpContext.Authentication.SignInAsync(registerViewModel.UserName);
+                await HttpContext.Authentication.SignInAsync(sessionId);
 
                 if (Url.IsLocalUrl(returnUrl))
                 {
