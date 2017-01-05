@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -47,8 +48,9 @@ namespace Service.Providers
                 var externalOperation = new ExternalOperation(operation);
 
                 //TODO Needs mapping from BankId to IP
-                const string pcIp = "192.168.1.11";
-                const string myOwnBankBaseAdress = "http://" + pcIp + "/BankService/web";
+                //const string pcIp = "192.168.1.11";
+                var externalIp = ConfigurationManager.AppSettings["ExternalIp"];
+                var myOwnBankBaseAdress = "http://" + externalIp + "/BankService/web";
                 var url = myOwnBankBaseAdress + "/accounts/" + operation.DestinationId;
 
                 var content = new StringContent(externalOperation.ToJson());
