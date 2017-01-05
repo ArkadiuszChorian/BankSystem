@@ -54,6 +54,7 @@ namespace Service.Providers
                 var content = new StringContent(externalOperation.ToJson());
                 //var json = externalOperation.ToJson();
                 //var content = new FormUrlEncodedContent(externalOperation);
+                //client.DefaultRequestHeaders.Authorization
 
                 var response = await client.PostAsync(url, content);
 

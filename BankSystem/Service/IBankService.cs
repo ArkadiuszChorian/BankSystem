@@ -31,6 +31,8 @@ namespace Service
         //string CreateAccount(User user);
         string CreateAccount(string sessionId);
         [OperationContract]
+        string DeleteAccount(string accountId);
+        [OperationContract]
         Task<string> Transfer(Operation operation);
         [OperationContract]
         string Payment(Operation operation);

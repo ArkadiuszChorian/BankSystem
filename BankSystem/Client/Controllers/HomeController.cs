@@ -34,21 +34,21 @@ namespace Client.Controllers
         public IActionResult Transfer(string id)
         {
             ViewData["Message"] = "Your application description page.";
-            ViewData["Id"] = id;
+            //ViewData["Id"] = id;
 
             return View();
         }
 
         [HttpPost]
-        public async Task<IActionResult> Transfer(TransferViewModel transferViewModel, string sourceId, string returnUrl)
+        public async Task<IActionResult> Transfer(string id, TransferViewModel transferViewModel, string returnUrl)
         {
             var bankService = new BankServiceClient();
 
             var operation = new Operation
             {
-                SourceId = sourceId,
+                SourceId = id,
                 DestinationId = transferViewModel.DestinationId,
-                Amount = transferViewModel.Amount,
+                Amount = transferViewModel.DecimalAmount(),
                 Title = transferViewModel.Title
             };
 
@@ -57,24 +57,76 @@ namespace Client.Controllers
             return RedirectToAction("Overview");
         }
 
-        public IActionResult Payment()
+        public IActionResult Payment(string id)
         {
             ViewData["Message"] = "Your contact page.";
-
-            return View();
-        }
-
-        public IActionResult WithDraw()
-        {
-            ViewData["Message"] = "Your contact page.";
+            ViewData["Title"] = "Payment";
+            //ViewData["Id"] = id;
 
             return View("Payment");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Payment(string id, PaymentViewModel paymentViewModel, string returnUrl)
+        {
+            var bankService = new BankServiceClient();
+            var operation = new Operation
+            {
+                Amount = paymentViewModel.DecimalAmount(),
+                DestinationId = id,
+                SourceId = "self"
+            };
+
+            var result = await bankService.PaymentAsync(operation);
+
+            return RedirectToAction("Overview");
+        }
+
+        public IActionResult Withdraw(string id)
+        {
+            ViewData["Message"] = "Your contact page.";
+            ViewData["Title"] = "Withdraw";
+            //ViewData["Id"] = id;
+
+            return View("Payment");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Withdraw(string id, PaymentViewModel paymentViewModel, string returnUrl)
+        {
+            var bankService = new BankServiceClient();
+            var operation = new Operation
+            {
+                Amount = paymentViewModel.DecimalAmount(),
+                DestinationId = "self",
+                SourceId = id
+            };
+
+            var result = await bankService.PaymentAsync(operation);
+
+            return RedirectToAction("WithdrawSuccess");
+        }
+
+        public IActionResult WithdrawSuccess()
+        {
+            ViewData["Message"] = "Your contact page.";
+            ViewData["Title"] = "Withdraw";
+
+            return View("WithdrawSuccess");
         }
 
         public async Task<IActionResult> CreateAccount()
         {
             var bankService = new BankServiceClient();
             var result = await bankService.CreateAccountAsync(await HttpContext.Authentication.GetSessionId());
+
+            return RedirectToAction("Overview");
+        }
+
+        public async Task<IActionResult> DeleteAccount(string id)
+        {
+            var bankService = new BankServiceClient();
+            var result = await bankService.DeleteAccountAsync(id);
 
             return RedirectToAction("Overview");
         }

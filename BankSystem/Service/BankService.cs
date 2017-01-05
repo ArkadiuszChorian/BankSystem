@@ -102,6 +102,17 @@ namespace Service
             return "OK";
         }
 
+        public string DeleteAccount(string accountId)
+        {
+            var ownerId = DAL.Instance.Accounts.First(account => account.Id == accountId).OwnerId;
+            DAL.Instance.Accounts.Delete(accountId);
+            var user = DAL.Instance.Users.First(user2 => user2.Id == ownerId);
+            user.Accounts.Remove(accountId);
+            DAL.Instance.Users.Update(user);
+
+            return "OK";
+        }
+
         public async Task<string> Transfer(Operation operation)
         {
             //var s = DAL.Instance.Configurations.AsQueryable().First(config => config.Key == "CurrentAccountId").Value;
@@ -174,12 +185,13 @@ namespace Service
 
             var webContext = WebOperationContext.Current;
             webContext.OutgoingResponse.StatusCode = HttpStatusCode.Created;
+            //webContext.IncomingRequest.
 
             var operation = new Operation(externalOperation, id);  
             
             TransferAndPaymentManager.ExecuteGainingOperation(operation);
 
             return "OK";
-        }
+        }      
     }
 }

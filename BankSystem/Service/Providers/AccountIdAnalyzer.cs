@@ -38,7 +38,7 @@ namespace Service.Providers
         public bool IsCheckSumCorrect(string accountId)
         {
             var assumedCheckSum = accountId.Substring(0, 2);
-            var recalculatedCheckSum = CreateCheckSumDigits(accountId.Substring(2));
+            var recalculatedCheckSum = CreateCheckSumDigits(accountId.Substring(2)).Substring(0, 2);
 
             return assumedCheckSum == recalculatedCheckSum;
         }    

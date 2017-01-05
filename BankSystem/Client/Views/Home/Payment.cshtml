@@ -1,7 +1,21 @@
-﻿@{
-    ViewData["Title"] = "About";
+﻿@model PaymentViewModel
+@{
+    ViewBag.Title = ViewData["Title"];
 }
-<h2>@ViewData["Title"].</h2>
-<h3>@ViewData["Message"]</h3>
+<h1>@ViewData["Title"]</h1>
 
-<p>Use this area to provide additional information.</p>
+<form asp-controller="Home" asp-action="@ViewData["Title"]" method="post" asp-route-returnUrl="@ViewData["ReturnUrl"]">
+    <div asp-validation-summary="ModelOnly"></div>
+
+    <div>
+        <label>Amount</label>
+        <input asp-for="AmountMain" />
+        <input asp-for="AmountReminder" />
+        <span asp-validation-for="AmountReminder"/>
+    </div>
+
+    <div>
+        <input type="submit" value="@ViewData["Title"]" />
+    </div>
+
+</form>

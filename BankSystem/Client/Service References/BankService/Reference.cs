@@ -366,6 +366,9 @@ namespace BankService
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/CreateAccount", ReplyAction="http://tempuri.org/IBankService/CreateAccountResponse")]
         System.Threading.Tasks.Task<string> CreateAccountAsync(string sessionId);
         
+        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/DeleteAccount", ReplyAction="http://tempuri.org/IBankService/DeleteAccountResponse")]
+        System.Threading.Tasks.Task<string> DeleteAccountAsync(string accountId);
+        
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankService/Transfer", ReplyAction="http://tempuri.org/IBankService/TransferResponse")]
         System.Threading.Tasks.Task<string> TransferAsync(BankService.Operation operation);
         
@@ -456,6 +459,11 @@ namespace BankService
         public System.Threading.Tasks.Task<string> CreateAccountAsync(string sessionId)
         {
             return base.Channel.CreateAccountAsync(sessionId);
+        }
+        
+        public System.Threading.Tasks.Task<string> DeleteAccountAsync(string accountId)
+        {
+            return base.Channel.DeleteAccountAsync(accountId);
         }
         
         public System.Threading.Tasks.Task<string> TransferAsync(BankService.Operation operation)
