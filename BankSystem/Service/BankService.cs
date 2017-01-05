@@ -167,22 +167,6 @@ namespace Service
         //public HttpResponseMessage ReceiveExternalTransfer(string id, int amount, string from, string title)
         public string ReceiveExternalTransfer(string id, ExternalOperation externalOperation)
         {
-            //var reminder = amount % 10;
-            //amount /= 10;
-            //reminder += 10 * (amount % 10);
-            //amount /= 10;
-
-            //var decimalTotalAmount = amount + ((decimal) reminder) / 100;
-
-            //var operation = new Operation
-            //{
-            //    Amount = decimalTotalAmount,
-            //    DateTime = DateTime.Now,
-            //    DestinationId = id,
-            //    SourceId = from,
-            //    Title = title
-            //};
-
             var webContext = WebOperationContext.Current;
             webContext.OutgoingResponse.StatusCode = HttpStatusCode.Created;
             //webContext.IncomingRequest.

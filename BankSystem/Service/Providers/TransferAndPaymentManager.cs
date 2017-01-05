@@ -53,13 +53,14 @@ namespace Service.Providers
                 var myOwnBankBaseAdress = "http://" + externalIp + "/BankService/web";
                 var url = myOwnBankBaseAdress + "/accounts/" + operation.DestinationId;
 
-                var content = new StringContent(externalOperation.ToJson());
+                var content = new StringContent(externalOperation.ToJson(), Encoding.UTF8, "application/json");
+
                 //var json = externalOperation.ToJson();
                 //var content = new FormUrlEncodedContent(externalOperation);
                 //client.DefaultRequestHeaders.Authorization
 
                 var response = await client.PostAsync(url, content);
-
+                
                 if (response.StatusCode == HttpStatusCode.Created)
                 {
                     //var sourceAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.SourceId);

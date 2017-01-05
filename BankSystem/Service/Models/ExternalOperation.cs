@@ -29,6 +29,11 @@ namespace Service.Models
         [DataMember(Name = "title")]
         public string Title { get; set; }
 
+        public string ToJson()
+        {
+            return "{\"amount\":" + Amount + ",\"from\":\"" + SourceId + "\",\"title\":\"" + Title + "\"}";
+        }
+
         //[DataMember]
         //public int amount { get; set; }
 
