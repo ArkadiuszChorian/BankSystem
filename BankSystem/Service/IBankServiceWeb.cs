@@ -19,6 +19,6 @@ namespace Service
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/accounts/{id}", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
         //HttpResponseMessage ReceiveExternalTransfer(string id, int amount, string from, string title);
-        string ReceiveExternalTransfer(string id, ExternalOperation externalOperation);
+        bool ReceiveExternalTransfer(string id, ExternalOperation externalOperation);
     }
 }

@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
+﻿using System.Configuration;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
-using MongoDB.Bson;
 using Service.Models;
 
-namespace Service.Providers
+namespace Service.Managers
 {
-    public class TransferAndPaymentManager
+    public class OperationManager
     {
         public void ExecuteInternalTransfer(Operation operation)
         {
@@ -37,8 +34,8 @@ namespace Service.Providers
             //DAL.Instance.Accounts.Update(sourceAccount);
             //DAL.Instance.Accounts.Update(destinationAccount);
 
-            ExecuteSpendingOperation(operation.Clone());
-            ExecuteGainingOperation(operation.Clone());
+            ExecuteExpenseOperation(operation.Clone());
+            ExecuteIncomeOperation(operation.Clone());
         }
 
         public async Task ExecuteExternalTransfer(Operation operation)
@@ -75,7 +72,7 @@ namespace Service.Providers
 
                     //DAL.Instance.Accounts.Update(sourceAccount);
 
-                    ExecuteSpendingOperation(operation);
+                    ExecuteExpenseOperation(operation);
                 }
 
                 var responseString = await response.Content.ReadAsStringAsync();
@@ -130,23 +127,23 @@ namespace Service.Providers
         //    //DAL.Instance.Accounts.Update(destinationAccount);
         //}
 
-        public void ExecuteGainingOperation(Operation operation)
+        public void ExecuteIncomeOperation(Operation operation)
         {
             var destinationAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.DestinationId);
             ExecuteOperation(operation, destinationAccount, true);
         }
 
-        public void ExecuteSpendingOperation(Operation operation)
+        public void ExecuteExpenseOperation(Operation operation)
         {
             var sourceAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.SourceId);
             ExecuteOperation(operation, sourceAccount, false);
         }
 
-        private void ExecuteOperation(Operation operation, Account account, bool isGaingingOperation)
+        private void ExecuteOperation(Operation operation, Account account, bool isIncomeOperation)
         {
             operation.BalanceBefore = account.Balance;
 
-            if (isGaingingOperation)
+            if (isIncomeOperation)
             {
                 account.Balance += operation.Amount;
             }

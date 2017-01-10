@@ -22,20 +22,20 @@ namespace Service
         [OperationContract]
         List<Operation> GetAccountHistory(string accountId);
         [OperationContract]
-        string GenerateSessionId(string userName);
+        string CreateSession(string userName);
         [OperationContract]
-        string AuthenticateUser(string userName, string password);
+        bool AuthenticateUser(string userName, string password);
         [OperationContract]
-        string RegisterUser(User user);
+        bool RegisterUser(User user);
         [OperationContract]
         //string CreateAccount(User user);
-        string CreateAccount(string sessionId);
+        bool CreateAccount(string sessionId);
         [OperationContract]
-        string DeleteAccount(string accountId);
+        bool DeleteAccount(string accountId);
         [OperationContract]
-        Task<string> Transfer(Operation operation);
+        Task<bool> Transfer(Operation operation);
         [OperationContract]
-        string Payment(Operation operation);
+        bool Payment(Operation operation);
 
         //======= Service - Service (REST) 
         //[OperationContract]

@@ -2,26 +2,21 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
-using System.Net.Http;
-using System.Net.Mime;
-using System.Runtime.Serialization;
 using System.ServiceModel;
 using System.ServiceModel.Web;
-using System.Text;
-using System.Threading;
 using System.Threading.Tasks;
-using System.Web;
-using System.Web.UI.WebControls;
-using Microsoft.AspNetCore.Mvc;
+using Service.Managers;
 using Service.Models;
 using Service.Providers;
+using AuthenticationManager = Service.Managers.AuthenticationManager;
 
 namespace Service
 {
     public class BankService : IBankService, IBankServiceWeb
     {
         public AccountIdAnalyzer AccountIdAnalyzer { get; set; } = new AccountIdAnalyzer();
-        public TransferAndPaymentManager TransferAndPaymentManager { get; set; } = new TransferAndPaymentManager();
+        public OperationManager OperationManager { get; set; } = new OperationManager();
+        public AuthenticationManager AuthenticationManager { get; set; } = new AuthenticationManager();
 
         public List<Account> GetAccounts(string sessionId)
         {
@@ -57,38 +52,43 @@ namespace Service
             return operations;
         }
 
-        public string GenerateSessionId(string userName)
+        public string CreateSession(string userName)
         {
-            var sessionIdGenerator = new SessionIdGenerator();
             var user = DAL.Instance.Users.First(user2 => user2.UserName == userName);
-            var session = new Session(sessionIdGenerator.GenerateId(), user.Id);
-            DAL.Instance.Sessions.Add(session);
-            user.Sessions.Add(session.Id);
-            DAL.Instance.Users.Update(user);
+            var sessionId = AuthenticationManager.CreateSession(user);
 
-            return session.SessionId;
+            return sessionId;
         }
 
-        public string AuthenticateUser(string userName, string password)
+        public bool AuthenticateUser(string userName, string password)
         {
-            var user = DAL.Instance.Users.First(user2 => user2.UserName == userName);
-            if (user.Password == password)
+            try
             {
-                return "OK";
+                var user = DAL.Instance.Users.FirstOrDefault(user2 => user2.UserName == userName);
+                if (user?.Password == password)
+                {
+                    //return "OK";
+                }
             }
-
-            return "ERR";
+            catch (InvalidOperationException e)
+            {
+                //Console.WriteLine(e);
+                throw new FaultException(e.Message);
+            }
+                   
+            //return "ERR";
+            return true;
         }
 
-        public string RegisterUser(User user)
+        public bool RegisterUser(User user)
         {
             DAL.Instance.Users.Add(user);
 
-            return "OK";
+            return true;
         }
 
         //public string CreateAccount(User user)
-        public string CreateAccount(string sessionId)
+        public bool CreateAccount(string sessionId)
         {
             //var userEntity = DAL.Instance.Users.First(usr => usr.UserName == user.UserName);
             var session = DAL.Instance.Sessions.First(session2 => session2.SessionId == sessionId);
@@ -99,10 +99,10 @@ namespace Service
             user.Accounts.Add(newAccount.Id);
             DAL.Instance.Users.Update(user);
 
-            return "OK";
+            return true;
         }
 
-        public string DeleteAccount(string accountId)
+        public bool DeleteAccount(string accountId)
         {
             var ownerId = DAL.Instance.Accounts.First(account => account.Id == accountId).OwnerId;
             DAL.Instance.Accounts.Delete(accountId);
@@ -110,19 +110,19 @@ namespace Service
             user.Accounts.Remove(accountId);
             DAL.Instance.Users.Update(user);
 
-            return "OK";
+            return true;
         }
 
-        public async Task<string> Transfer(Operation operation)
+        public async Task<bool> Transfer(Operation operation)
         {
             //var s = DAL.Instance.Configurations.AsQueryable().First(config => config.Key == "CurrentAccountId").Value;
             if (AccountIdAnalyzer.IsInternalAccount(operation.DestinationId))
             {
-                TransferAndPaymentManager.ExecuteInternalTransfer(operation);
+                OperationManager.ExecuteInternalTransfer(operation);
             }
             else
             {
-                await TransferAndPaymentManager.ExecuteExternalTransfer(operation);
+                await OperationManager.ExecuteExternalTransfer(operation);
             }                  
 
             //var sourceAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.SourceId);
@@ -147,35 +147,34 @@ namespace Service
             //DAL.Instance.Accounts.Update(sourceAccount);
             //DAL.Instance.Accounts.Update(destinationAccount);
 
-            return "OK";
+            return true;
         }
 
-        public string Payment(Operation operation)
+        public bool Payment(Operation operation)
         {
             if (AccountIdAnalyzer.IsValidId(operation.DestinationId))
             {
-                TransferAndPaymentManager.ExecuteGainingOperation(operation);
+                OperationManager.ExecuteIncomeOperation(operation);
             }
             else
             {
-                TransferAndPaymentManager.ExecuteSpendingOperation(operation);
+                OperationManager.ExecuteExpenseOperation(operation);
             }
 
-            return "OK";
+            return true;
         }
 
         //public HttpResponseMessage ReceiveExternalTransfer(string id, int amount, string from, string title)
-        public string ReceiveExternalTransfer(string id, ExternalOperation externalOperation)
+        public bool ReceiveExternalTransfer(string id, ExternalOperation externalOperation)
         {
             var webContext = WebOperationContext.Current;
             webContext.OutgoingResponse.StatusCode = HttpStatusCode.Created;
-            //webContext.IncomingRequest.
 
             var operation = new Operation(externalOperation, id);  
             
-            TransferAndPaymentManager.ExecuteGainingOperation(operation);
+            OperationManager.ExecuteIncomeOperation(operation);
 
-            return "OK";
+            return true;
         }      
     }
 }

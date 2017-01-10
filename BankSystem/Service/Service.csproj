@@ -65,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IBankServiceWeb.cs" />
+    <Compile Include="Managers\AuthenticationManager.cs" />
     <Compile Include="Models\ExternalOperation.cs" />
     <Compile Include="Models\Session.cs" />
     <Compile Include="Providers\AccountIdGenerator.cs" />
@@ -80,7 +81,7 @@
     <Compile Include="Models\User.cs" />
     <Compile Include="Providers\AccountIdAnalyzer.cs" />
     <Compile Include="Providers\SessionIdGenerator.cs" />
-    <Compile Include="Providers\TransferAndPaymentManager.cs" />
+    <Compile Include="Managers\OperationManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
