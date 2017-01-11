@@ -1,4 +1,5 @@
-﻿using System.ServiceModel;
+﻿using System.Net.Http;
+using System.ServiceModel;
 using System.ServiceModel.Web;
 using Service.Models;
 
@@ -10,8 +11,7 @@ namespace Service
     {      
         //======= Service - Service (REST) 
         [OperationContract]
-        [WebInvoke(Method = "POST", UriTemplate = "/accounts/{id}", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json)]
-        //HttpResponseMessage ReceiveExternalTransfer(string id, int amount, string from, string title);
-        bool ReceiveExternalTransfer(string id, ExternalOperation externalOperation);
+        [WebInvoke(Method = "POST", UriTemplate = "/accounts/{id}", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedResponse)]
+        string ReceiveExternalTransfer(string id, ExternalOperation externalOperation);
     }
 }

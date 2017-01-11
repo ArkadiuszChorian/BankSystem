@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
+using System.Net.Http;
+using System.Net.Mime;
 using System.ServiceModel;
 using System.ServiceModel.Web;
+using System.Text;
 using System.Threading.Tasks;
 using Service.Managers;
 using Service.Models;
@@ -75,7 +78,7 @@ namespace Service
                 //Console.WriteLine(e);
                 throw new FaultException(e.Message);
             }
-                   
+
             //return "ERR";
             return true;
         }
@@ -94,7 +97,7 @@ namespace Service
             var session = DAL.Instance.Sessions.First(session2 => session2.SessionId == sessionId);
             var user = DAL.Instance.Users.First(user2 => user2.Id == session.UserId);
             //DAL.Instance.Accounts.InsertOne(new Account(userEntity.Id));
-            var newAccount = new Account { OwnerId = user.Id };
+            var newAccount = new Account {OwnerId = user.Id};
             DAL.Instance.Accounts.Add(newAccount);
             user.Accounts.Add(newAccount.Id);
             DAL.Instance.Users.Update(user);
@@ -122,8 +125,9 @@ namespace Service
             }
             else
             {
-                await OperationManager.ExecuteExternalTransfer(operation);
-            }                  
+                var credentials = AuthenticationManager.CreateBankCredentials();
+                await OperationManager.ExecuteExternalTransfer(operation, credentials);
+            }
 
             //var sourceAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.SourceId);
             //var destinationAccount = DAL.Instance.Accounts.Single(account => account.Id == operation.DestinationId);
@@ -163,18 +167,33 @@ namespace Service
 
             return true;
         }
-
-        //public HttpResponseMessage ReceiveExternalTransfer(string id, int amount, string from, string title)
-        public bool ReceiveExternalTransfer(string id, ExternalOperation externalOperation)
+        
+        public string ReceiveExternalTransfer(string id, ExternalOperation externalOperation)
         {
             var webContext = WebOperationContext.Current;
-            webContext.OutgoingResponse.StatusCode = HttpStatusCode.Created;
 
-            var operation = new Operation(externalOperation, id);  
+            try
+            {                
+                var incomingCredentials = webContext.IncomingRequest.Headers[HttpRequestHeader.Authorization];
+
+                if (AuthenticationManager.CheckBankCredentials(incomingCredentials) == false)
+                {
+                    webContext.OutgoingResponse.Headers[HttpResponseHeader.WwwAuthenticate] = "Basic realm=\"Base64(login:password)\"";
+
+                    throw new WebFaultException<JsonError>(new JsonError("Incorrect credentials. Check login, password or investigate encoding process."), HttpStatusCode.Unauthorized);
+                }
+
+                var operation = new Operation(externalOperation, id);
+                OperationManager.ExecuteIncomeOperation(operation);
+
+                webContext.OutgoingResponse.StatusCode = HttpStatusCode.Created;
+            }
+            catch (FormatException exception)
+            {               
+                throw new WebFaultException<JsonError>(new JsonError(exception.Message), HttpStatusCode.BadRequest);
+            }
             
-            OperationManager.ExecuteIncomeOperation(operation);
-
-            return true;
+            return "Success";
         }      
     }
 }

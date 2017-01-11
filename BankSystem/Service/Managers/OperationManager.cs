@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Net;
 using System.Net.Http;
+using System.ServiceModel.Web;
 using System.Text;
 using System.Threading.Tasks;
 using Service.Models;
@@ -38,7 +39,7 @@ namespace Service.Managers
             ExecuteIncomeOperation(operation.Clone());
         }
 
-        public async Task ExecuteExternalTransfer(Operation operation)
+        public async Task ExecuteExternalTransfer(Operation operation, string credentials)
         {
             using (var client = new HttpClient())
             {
@@ -52,10 +53,14 @@ namespace Service.Managers
 
                 var content = new StringContent(externalOperation.ToJson(), Encoding.UTF8, "application/json");
 
+                //Todo
+                //httpWebRequest.Headers.Add("Authorization", "Basic " + encoded);
+
                 //var json = externalOperation.ToJson();
                 //var content = new FormUrlEncodedContent(externalOperation);
                 //client.DefaultRequestHeaders.Authorization
 
+                client.DefaultRequestHeaders.Add("Authorization", credentials);
                 var response = await client.PostAsync(url, content);
                 
                 if (response.StatusCode == HttpStatusCode.Created)

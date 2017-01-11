@@ -60,9 +60,11 @@
     <Reference Include="System.ServiceModel.Web" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Extensions.cs" />
     <Compile Include="IBankServiceWeb.cs" />
     <Compile Include="Managers\AuthenticationManager.cs" />
     <Compile Include="Models\ExternalOperation.cs" />
+    <Compile Include="Models\JsonError.cs" />
     <Compile Include="Models\Session.cs" />
     <Compile Include="Providers\AccountIdGenerator.cs" />
     <Compile Include="DAL.cs" />

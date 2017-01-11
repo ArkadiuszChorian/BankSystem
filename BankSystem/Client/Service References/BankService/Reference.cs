@@ -532,7 +532,7 @@ namespace BankService
     {
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/IBankServiceWeb/ReceiveExternalTransfer", ReplyAction="http://tempuri.org/IBankServiceWeb/ReceiveExternalTransferResponse")]
-        System.Threading.Tasks.Task<bool> ReceiveExternalTransferAsync(string id, BankService.ExternalOperation externalOperation);
+        System.Threading.Tasks.Task<string> ReceiveExternalTransferAsync(string id, BankService.ExternalOperation externalOperation);
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("dotnet-svcutil", "0.4.0.0")]
@@ -550,7 +550,7 @@ namespace BankService
         {
         }
         
-        public System.Threading.Tasks.Task<bool> ReceiveExternalTransferAsync(string id, BankService.ExternalOperation externalOperation)
+        public System.Threading.Tasks.Task<string> ReceiveExternalTransferAsync(string id, BankService.ExternalOperation externalOperation)
         {
             return base.Channel.ReceiveExternalTransferAsync(id, externalOperation);
         }
