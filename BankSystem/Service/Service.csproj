@@ -62,11 +62,13 @@
   <ItemGroup>
     <Compile Include="Extensions.cs" />
     <Compile Include="IBankServiceWeb.cs" />
+    <Compile Include="Managers\AccountManager.cs" />
     <Compile Include="Managers\AuthenticationManager.cs" />
-    <Compile Include="Models\ExternalOperation.cs" />
+    <Compile Include="Managers\UserManager.cs" />
+    <Compile Include="Models\ExternalTransfer.cs" />
     <Compile Include="Models\JsonError.cs" />
     <Compile Include="Models\Session.cs" />
-    <Compile Include="Providers\AccountIdGenerator.cs" />
+    <Compile Include="Generators\AccountIdGenerator.cs" />
     <Compile Include="DAL.cs" />
     <Compile Include="Models\Account.cs" />
     <Compile Include="Models\ConfigKeyValue.cs" />
@@ -77,9 +79,11 @@
     <Compile Include="BankService.cs" />
     <Compile Include="Models\Transfer.cs" />
     <Compile Include="Models\User.cs" />
-    <Compile Include="Providers\AccountIdAnalyzer.cs" />
-    <Compile Include="Providers\SessionIdGenerator.cs" />
+    <Compile Include="Analyzers\AccountAnalyzer.cs" />
+    <Compile Include="Generators\SessionIdGenerator.cs" />
     <Compile Include="Managers\OperationManager.cs" />
+    <Compile Include="Analyzers\IValidator.cs" />
+    <Compile Include="Analyzers\OperationAnalyzer.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

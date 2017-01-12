@@ -28,14 +28,19 @@ namespace Service
         [OperationContract]
         bool RegisterUser(User user);
         [OperationContract]
+        bool DeleteUser(string sessionId);
+        [OperationContract]
         //string CreateAccount(User user);
         bool CreateAccount(string sessionId);
         [OperationContract]
         bool DeleteAccount(string accountId);
+
         [OperationContract]
-        Task<bool> Transfer(Operation operation);
-        [OperationContract]
-        bool Payment(Operation operation);
+        bool ExecuteOperation(Operation operation);
+        //[OperationContract]
+        //Task<bool> Transfer(Operation operation);
+        //[OperationContract]
+        //bool Payment(Operation operation);
 
         //======= Service - Service (REST) 
         //[OperationContract]

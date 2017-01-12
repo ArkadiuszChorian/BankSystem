@@ -44,14 +44,14 @@ namespace Client.Controllers
             var bankService = new BankServiceClient();
             var serviceResponse = await bankService.AuthenticateUserAsync(loginViewModel.UserName, loginViewModel.Password);
 
-            if (serviceResponse == "OK")
+            if (serviceResponse)
             {
                 //var claims = new List<Claim>{ new Claim(ClaimTypes.Name, loginViewModel.UserName) };              
                 //var claimsIdentity = new ClaimsIdentity(claims);
                 //var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
 
                 //await HttpContext.Authentication.SignInAsync("Cookies", claimsPrinciple);
-                var sessionId = await bankService.GenerateSessionIdAsync(loginViewModel.UserName);
+                var sessionId = await bankService.CreateSessionAsync(loginViewModel.UserName);
 
                 await HttpContext.Authentication.SignInAsync(sessionId);
 
@@ -87,9 +87,9 @@ namespace Client.Controllers
             };
 
             var serviceResponse = await bankService.RegisterUserAsync(newUser);
-            var sessionId = await bankService.GenerateSessionIdAsync(registerViewModel.UserName);
+            var sessionId = await bankService.CreateSessionAsync(registerViewModel.UserName);
 
-            if (serviceResponse == "OK")
+            if (serviceResponse)
             {
                 //var claims = new List<Claim> { new Claim(ClaimTypes.Name, newUser.UserName) };
 

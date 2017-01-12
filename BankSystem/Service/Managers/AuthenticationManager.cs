@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Configuration;
+using System.Linq;
 using System.Security.Authentication;
 using System.Text;
+using Service.Generators;
 using Service.Models;
-using Service.Providers;
 
 namespace Service.Managers
 {
@@ -11,8 +12,9 @@ namespace Service.Managers
     {
         public SessionIdGenerator SessionIdGenerator { get; set; } = new SessionIdGenerator();
 
-        public string CreateSession(User user)
+        public string CreateSession(string userName)
         {
+            var user = DAL.Instance.Users.First(user2 => user2.UserName == userName);
             var session = new Session(SessionIdGenerator.GenerateId(), user.Id);
             DAL.Instance.Sessions.Add(session);
             user.Sessions.Add(session.Id);
@@ -54,6 +56,33 @@ namespace Service.Managers
             var encoded = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(login + ":" + password));
 
             return "Basic " + encoded;
+        }
+
+        public bool ChceckUserCredentials(string userName, string password)
+        {
+            try
+            {
+                var user = DAL.Instance.Users.Single(user2 => user2.UserName == userName);
+
+                if (user.Password != password)
+                {
+                    throw new AuthenticationException("Username, password or both are incorrect.");
+                }
+            }
+            catch (InvalidOperationException exception)
+            {
+                throw new AuthenticationException("Username, password or both are incorrect.");
+            }
+
+            return true;
+        }
+
+        public User GetUserFromSessionId(string sessionId)
+        {
+            var session = DAL.Instance.Sessions.Single(session2 => session2.SessionId == sessionId);
+            var user = DAL.Instance.Users.Single(user2 => user2.Id == session.UserId);
+
+            return user;
         }
     }
 }

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 using MongoDB.Bson.Serialization.Attributes;
 using MongoDB.Bson.Serialization.IdGenerators;
 using MongoRepository;
@@ -13,18 +9,19 @@ namespace Service.Models
     [DataContract]
     public class Operation : IEntity<string>
     {
-        public Operation(ExternalOperation externalOperation, string destinationId)
+        public Operation(ExternalTransfer externalTransfer, string destinationId)
         {
-            var amount = externalOperation.Amount;
-            var reminder = externalOperation.Amount % 10;
+            var amount = externalTransfer.Amount;
+            var reminder = externalTransfer.Amount % 10;
             amount /= 10;
             reminder += 10 * (amount % 10);
             amount /= 10;
 
             Amount = amount + (decimal)reminder / 100;
-            SourceId = externalOperation.SourceId;
+            SourceId = externalTransfer.SourceId;
             DestinationId = destinationId;
-            Title = externalOperation.Title;
+            Title = externalTransfer.Title;
+            OperationType = OperationTypes.Transfer;
         }   
             
         [DataMember]
@@ -44,9 +41,19 @@ namespace Service.Models
         public decimal BalanceBefore { get; set; }
         [DataMember]
         public decimal BalanceAfter { get; set; }
+        [DataMember]
+        public OperationTypes OperationType { get; set; }
+
         public Operation Clone()
         {
             return (Operation)MemberwiseClone();
+        }
+
+        public enum OperationTypes
+        {
+            Transfer,
+            Payment,
+            Withdraw
         }
     }
 }

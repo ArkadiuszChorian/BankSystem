@@ -12,6 +12,6 @@ namespace Service
         //======= Service - Service (REST) 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/accounts/{id}", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedResponse)]
-        string ReceiveExternalTransfer(string id, ExternalOperation externalOperation);
+        string ReceiveExternalTransfer(string id, ExternalTransfer externalTransfer);
     }
 }

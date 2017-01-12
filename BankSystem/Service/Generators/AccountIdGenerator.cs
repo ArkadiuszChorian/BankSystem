@@ -1,8 +1,9 @@
 ﻿using System.Configuration;
 using System.Linq;
 using MongoDB.Bson.Serialization;
+using Service.Analyzers;
 
-namespace Service.Providers
+namespace Service.Generators
 {
     public class AccountIdGenerator : IIdGenerator
     {
@@ -23,8 +24,8 @@ namespace Service.Providers
             DAL.Instance.Configurations.Update(currentAccountIdConfigKeyValue);
 
             var accountIdWithBankId = ConfigurationManager.AppSettings["BankId"] + currentAccountIdAsString;
-            var accountIdAnalyzer = new AccountIdAnalyzer();
-            var fullAccountId = accountIdAnalyzer.CreateCheckSumDigits(accountIdWithBankId);
+            var accountIdAnalyzer = new AccountAnalyzer();
+            var fullAccountId = accountIdAnalyzer.AppendChecksumDigits(accountIdWithBankId);
 
             return fullAccountId;
         }

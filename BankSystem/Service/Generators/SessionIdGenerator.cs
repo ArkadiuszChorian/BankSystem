@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 
-namespace Service.Providers
+namespace Service.Generators
 {
     public class SessionIdGenerator
     {
