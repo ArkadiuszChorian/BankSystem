@@ -5,7 +5,7 @@ namespace Service.Analyzers
 {
     public class OperationAnalyzer : IValidator<Operation>
     {
-        public AccountAnalyzer AccountAnalyzer { get; set; }
+        public AccountAnalyzer AccountAnalyzer { get; set; } = new AccountAnalyzer();
         public bool Validate(Operation operation)
         {
             switch (operation.OperationType)
@@ -21,11 +21,11 @@ namespace Service.Analyzers
                     AccountAnalyzer.ValidateId(operation.SourceId, true);
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(operation.OperationType), operation.OperationType, "Operation type is null or incorrect");
+                    throw new ArgumentException("Operation type is null or incorrect");
             }  
             if (operation.Amount <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(operation.Amount), operation.Amount, "Operation amount is equal or below zero.");
+                throw new ArgumentException("Operation amount is equal or below zero.");
             }
 
             return true;

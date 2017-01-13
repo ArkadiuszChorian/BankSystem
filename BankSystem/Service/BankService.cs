@@ -14,7 +14,6 @@ namespace Service
 {
     public class BankService : IBankService, IBankServiceWeb
     {
-        public AccountAnalyzer AccountAnalyzer { get; set; } = new AccountAnalyzer();
         public OperationManager OperationManager { get; set; } = new OperationManager();
         public AuthenticationManager AuthenticationManager { get; set; } = new AuthenticationManager();
         public AccountManager AccountManager { get; set; } = new AccountManager();
@@ -64,7 +63,7 @@ namespace Service
         }
 
         public bool RegisterUser(User user)
-        {
+        {          
             UserManager.RegisterUser(user);
 
             return true;
@@ -98,6 +97,7 @@ namespace Service
         {
             try
             {
+                OperationManager.OperationAnalyzer.Validate(operation);
                 OperationManager.ExecuteOperation(operation);
             }
             catch (Exception exception)

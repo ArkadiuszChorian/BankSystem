@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using BankService;
 using Client.ViewModels;
@@ -49,10 +50,21 @@ namespace Client.Controllers
                 SourceId = id,
                 DestinationId = transferViewModel.DestinationId,
                 Amount = transferViewModel.DecimalAmount(),
-                Title = transferViewModel.Title
+                Title = transferViewModel.Title,
+                OperationType = Operation.OperationTypes.Transfer
             };
 
-            var result = await bankService.TransferAsync(operation);
+            //var result = await bankService.TransferAsync(operation);
+            try
+            {
+                await bankService.ExecuteOperationAsync(operation);
+            }
+            catch (FaultException exception)
+            {
+                ViewData["Error"] = exception.Message;
+
+                return View();
+            }        
 
             return RedirectToAction("Overview");
         }
@@ -74,11 +86,22 @@ namespace Client.Controllers
             {
                 Amount = paymentViewModel.DecimalAmount(),
                 DestinationId = id,
-                SourceId = "self"
+                OperationType = Operation.OperationTypes.Payment
             };
 
-            var result = await bankService.PaymentAsync(operation);
+            //var result = await bankService.PaymentAsync(operation);
+            try
+            {
+                await bankService.ExecuteOperationAsync(operation);
+            }
+            catch (FaultException exception)
+            {
+                ViewData["Title"] = "Payment";
+                ViewData["Error"] = exception.Message;
 
+                return View("Payment");
+            }
+            
             return RedirectToAction("Overview");
         }
 
@@ -98,11 +121,22 @@ namespace Client.Controllers
             var operation = new Operation
             {
                 Amount = paymentViewModel.DecimalAmount(),
-                DestinationId = "self",
-                SourceId = id
+                SourceId = id,
+                OperationType = Operation.OperationTypes.Withdraw
             };
 
-            var result = await bankService.PaymentAsync(operation);
+            //var result = await bankService.PaymentAsync(operation);
+
+            try
+            {
+                await bankService.ExecuteOperationAsync(operation);
+            }
+            catch (FaultException exception)
+            {
+                ViewData["Error"] = exception.Message;
+
+                return View("Payment");
+            }
 
             return RedirectToAction("WithdrawSuccess");
         }

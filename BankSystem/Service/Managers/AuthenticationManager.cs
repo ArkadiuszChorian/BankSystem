@@ -20,7 +20,7 @@ namespace Service.Managers
             user.Sessions.Add(session.Id);
             DAL.Instance.Users.Update(user);
 
-            return session.Id;
+            return session.SessionId;
         }
 
         public bool CheckBankCredentials(string encodedCredentials)

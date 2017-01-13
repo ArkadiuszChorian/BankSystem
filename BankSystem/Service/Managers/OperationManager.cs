@@ -30,8 +30,8 @@ namespace Service.Managers
                         var destinationAccount = DAL.Instance.Accounts.GetDestinationAccount(operation.DestinationId);
                         var sourceAccount = DAL.Instance.Accounts.GetSourceAccount(operation.SourceId);
                         
-                        ExecuteOperation(operation, sourceAccount, OperationDirections.Expense);
-                        ExecuteOperation(operation, destinationAccount, OperationDirections.Income);
+                        ExecuteOperation(operation.Clone(), sourceAccount, OperationDirections.Expense);
+                        ExecuteOperation(operation.Clone(), destinationAccount, OperationDirections.Income);
                     }
                     else if (sourceAccountIsInternal)
                     {
@@ -40,14 +40,14 @@ namespace Service.Managers
                         var responseCode = await ExecuteExternalTransfer(operation, AuthenticationManager.CreateBankCredentials());
                         if (responseCode == HttpStatusCode.Created)
                         {
-                            ExecuteOperation(operation, sourceAccount, OperationDirections.Expense);
+                            ExecuteOperation(operation.Clone(), sourceAccount, OperationDirections.Expense);
                         }
                     }
                     else if (destinationAccountIsInternal)
                     {
                         var destinationAccount = DAL.Instance.Accounts.GetDestinationAccount(operation.DestinationId);
                         
-                        ExecuteOperation(operation, destinationAccount, OperationDirections.Income);
+                        ExecuteOperation(operation.Clone(), destinationAccount, OperationDirections.Income);
                     }
                     else
                     {
@@ -59,7 +59,7 @@ namespace Service.Managers
                     {
                         var destinationAccount = DAL.Instance.Accounts.GetDestinationAccount(operation.DestinationId);
 
-                        ExecuteOperation(operation, destinationAccount, OperationDirections.Income);
+                        ExecuteOperation(operation.Clone(), destinationAccount, OperationDirections.Income);
                     }
                     else
                     {
@@ -71,7 +71,7 @@ namespace Service.Managers
                     {
                         var sourceAccount = DAL.Instance.Accounts.GetSourceAccount(operation.SourceId);
 
-                        ExecuteOperation(operation, sourceAccount, OperationDirections.Expense);
+                        ExecuteOperation(operation.Clone(), sourceAccount, OperationDirections.Expense);
                     }
                     else
                     {

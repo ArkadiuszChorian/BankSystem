@@ -1,4 +1,5 @@
-﻿using Service.Models;
+﻿using System.Collections.Generic;
+using Service.Models;
 
 namespace Service.Managers
 {
@@ -6,6 +7,8 @@ namespace Service.Managers
     {
         public void RegisterUser(User user)
         {
+            user.Accounts = new List<string>();
+            user.Sessions = new List<string>();
             DAL.Instance.Users.Add(user);           
         }
 
