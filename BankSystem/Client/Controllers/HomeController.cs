@@ -34,7 +34,7 @@ namespace Client.Controllers
 
         public IActionResult Transfer(string id)
         {
-            ViewData["Message"] = "Your application description page.";
+            ViewData["Message"] = "Transfer page.";
             //ViewData["Id"] = id;
 
             return View();
@@ -133,6 +133,7 @@ namespace Client.Controllers
             }
             catch (FaultException exception)
             {
+                ViewData["Title"] = "Withdraw";
                 ViewData["Error"] = exception.Message;
 
                 return View("Payment");

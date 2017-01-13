@@ -15,7 +15,7 @@ namespace Service.Managers
         public OperationAnalyzer OperationAnalyzer { get; set; } = new OperationAnalyzer();
         public AuthenticationManager AuthenticationManager { get; set; } = new AuthenticationManager();
 
-        public async void ExecuteOperation(Operation operation)
+        public async Task ExecuteOperation(Operation operation)
         {
             OperationAnalyzer.Validate(operation);
 
@@ -36,7 +36,7 @@ namespace Service.Managers
                     else if (sourceAccountIsInternal)
                     {
                         var sourceAccount = DAL.Instance.Accounts.GetSourceAccount(operation.SourceId);
-                       
+
                         var responseCode = await ExecuteExternalTransfer(operation, AuthenticationManager.CreateBankCredentials());
                         if (responseCode == HttpStatusCode.Created)
                         {
@@ -79,7 +79,7 @@ namespace Service.Managers
                     }
                     break;
                 default:
-                    throw new ArgumentOutOfRangeException(nameof(operation.OperationType), operation.OperationType, "Operation type is null or incorrect");
+                    throw new ArgumentException("Operation type is null or incorrect");
             }
         }
         //public void ExecuteInternalTransfer(Operation operation)

@@ -36,7 +36,7 @@ namespace Service
         bool DeleteAccount(string accountId);
 
         [OperationContract]
-        bool ExecuteOperation(Operation operation);
+        Task<bool> ExecuteOperation(Operation operation);
         //[OperationContract]
         //Task<bool> Transfer(Operation operation);
         //[OperationContract]

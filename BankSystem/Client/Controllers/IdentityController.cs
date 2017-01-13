@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using System.ServiceModel;
 using System.Threading.Tasks;
 using BankService;
 using Client.ViewModels;
@@ -42,27 +43,38 @@ namespace Client.Controllers
         public async Task<IActionResult> Login(LoginViewModel loginViewModel, string returnUrl)
         {
             var bankService = new BankServiceClient();
-            var serviceResponse = await bankService.AuthenticateUserAsync(loginViewModel.UserName, loginViewModel.Password);
 
-            if (serviceResponse)
+            try
             {
-                //var claims = new List<Claim>{ new Claim(ClaimTypes.Name, loginViewModel.UserName) };              
-                //var claimsIdentity = new ClaimsIdentity(claims);
-                //var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
+                var serviceResponse = await bankService.AuthenticateUserAsync(loginViewModel.UserName, loginViewModel.Password);
 
-                //await HttpContext.Authentication.SignInAsync("Cookies", claimsPrinciple);
-                var sessionId = await bankService.CreateSessionAsync(loginViewModel.UserName);
-
-                await HttpContext.Authentication.SignInAsync(sessionId);
-
-                if (Url.IsLocalUrl(returnUrl))
+                if (serviceResponse)
                 {
-                    return Redirect(returnUrl);                  
+                    //var claims = new List<Claim>{ new Claim(ClaimTypes.Name, loginViewModel.UserName) };              
+                    //var claimsIdentity = new ClaimsIdentity(claims);
+                    //var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
+
+                    //await HttpContext.Authentication.SignInAsync("Cookies", claimsPrinciple);
+                    var sessionId = await bankService.CreateSessionAsync(loginViewModel.UserName);
+
+                    await HttpContext.Authentication.SignInAsync(sessionId);
+
+                    if (Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+
+                    return Redirect("/");
                 }
-
-                return Redirect("/");
             }
+            catch (FaultException exception)
+            {
+                ViewData["ReturnUrl"] = returnUrl;
+                ViewData["Error"] = exception.Message;
 
+                return View();
+            }
+            
             return View();
         }
 
@@ -81,32 +93,40 @@ namespace Client.Controllers
             var newUser = new User
             {
                 UserName = registerViewModel.UserName,
-                Password = registerViewModel.Password,
-                Sessions = new List<string>(),
-                Accounts = new List<string>()
+                Password = registerViewModel.Password
             };
-
-            var serviceResponse = await bankService.RegisterUserAsync(newUser);
-            var sessionId = await bankService.CreateSessionAsync(registerViewModel.UserName);
-
-            if (serviceResponse)
+       
+            try
             {
-                //var claims = new List<Claim> { new Claim(ClaimTypes.Name, newUser.UserName) };
+                var serviceResponse = await bankService.RegisterUserAsync(newUser);
+                var sessionId = await bankService.CreateSessionAsync(registerViewModel.UserName);
 
-                //var claimsIdentity = new ClaimsIdentity(claims, "password");
-                //var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
-
-                //await HttpContext.Authentication.SignInAsync("Cookies", claimsPrinciple);
-
-                //await HttpContext.Authentication.SignInAsync(registerViewModel.UserName);
-                await HttpContext.Authentication.SignInAsync(sessionId);
-
-                if (Url.IsLocalUrl(returnUrl))
+                if (serviceResponse)
                 {
-                    return Redirect(returnUrl);
-                }
+                    //var claims = new List<Claim> { new Claim(ClaimTypes.Name, newUser.UserName) };
 
-                return Redirect("/");
+                    //var claimsIdentity = new ClaimsIdentity(claims, "password");
+                    //var claimsPrinciple = new ClaimsPrincipal(claimsIdentity);
+
+                    //await HttpContext.Authentication.SignInAsync("Cookies", claimsPrinciple);
+
+                    //await HttpContext.Authentication.SignInAsync(registerViewModel.UserName);
+                    await HttpContext.Authentication.SignInAsync(sessionId);
+
+                    if (Url.IsLocalUrl(returnUrl))
+                    {
+                        return Redirect(returnUrl);
+                    }
+
+                    return Redirect("/");
+                }
+            }
+            catch (FaultException exception)
+            {
+                ViewData["ReturnUrl"] = returnUrl;
+                ViewData["Error"] = exception.Message;
+
+                return View();
             }
 
             return View();

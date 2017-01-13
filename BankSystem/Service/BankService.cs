@@ -5,6 +5,7 @@ using System.Net;
 using System.Security.Authentication;
 using System.ServiceModel;
 using System.ServiceModel.Web;
+using System.Threading.Tasks;
 using Service.Analyzers;
 using Service.Managers;
 using Service.Models;
@@ -93,12 +94,11 @@ namespace Service
             return true;
         }
 
-        public bool ExecuteOperation(Operation operation)
+        public async Task<bool> ExecuteOperation(Operation operation)
         {
             try
             {
-                OperationManager.OperationAnalyzer.Validate(operation);
-                OperationManager.ExecuteOperation(operation);
+                await OperationManager.ExecuteOperation(operation);
             }
             catch (Exception exception)
             {
@@ -148,7 +148,7 @@ namespace Service
         //    return true;
         //}
         
-        public string ReceiveExternalTransfer(string id, ExternalTransfer externalTransfer)
+        public async Task<string> ReceiveExternalTransfer(string id, ExternalTransfer externalTransfer)
         {
             var webContext = WebOperationContext.Current;
 
@@ -164,7 +164,7 @@ namespace Service
                 }
 
                 var operation = new Operation(externalTransfer, id);
-                OperationManager.ExecuteOperation(operation);
+                await OperationManager.ExecuteOperation(operation);
 
                 webContext.OutgoingResponse.StatusCode = HttpStatusCode.Created;
             }
