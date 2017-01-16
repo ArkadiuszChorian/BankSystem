@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -14,6 +15,7 @@ namespace Service
     {
         private static readonly Lazy<DAL> Lazy = new Lazy<DAL>(() => new DAL());
         public static DAL Instance => Lazy.Value;
+        private const string MappingFilePath = "../../../BankIdToIpMapping.csv";
 
         private DAL()
         {
@@ -42,6 +44,8 @@ namespace Service
             Accounts = new MongoRepository<Account, string>();
             Operations = new MongoRepository<Operation, string>();
             Sessions = new MongoRepository<Session, string>();
+            BankIdToIpMapping = new Dictionary<string, string>();
+            ReadBankIdToIpMappingFromFile();
 
             //Client = new MongoClient(ConfigurationManager.ConnectionStrings["MongoDB"].ConnectionString);
             //Database = Client.GetDatabase("banksystem");
@@ -62,6 +66,28 @@ namespace Service
             //Operations = Database.GetCollection<Operation>("Operations");
         }
 
+        private void ReadBankIdToIpMappingFromFile()
+        {
+            try
+            {
+                using (var streamReader = new StreamReader(MappingFilePath))
+                {
+                    var line = streamReader.ReadLine();
+
+                    while ((line = streamReader.ReadLine()) != null)
+                    {
+                        var splitted = line.Split(';');
+                        BankIdToIpMapping.Add(splitted[0], splitted[1]);
+                    }
+                }
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine("The file could not be read:");
+                Console.WriteLine(e.Message);
+            }
+        }
+
         //public IMongoClient Client { get; set; }
         //public IMongoDatabase Database { get; set; }
         //public IMongoCollection<User> Users { get; set; } 
@@ -74,6 +100,7 @@ namespace Service
         public MongoRepository<Operation, string> Operations { get; set; }
         public MongoRepository<Session, string> Sessions { get; set; }
         public MongoRepository<ConfigKeyValue, string> Configurations { get; set; }
+        public Dictionary<string, string> BankIdToIpMapping { get; set; }
 
         //public static IMongoCollection<Artist> Artists;
         //public static IMongoCollection<Song> Songs;

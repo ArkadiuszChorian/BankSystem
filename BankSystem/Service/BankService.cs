@@ -151,7 +151,7 @@ namespace Service
         public async Task<string> ReceiveExternalTransfer(string id, ExternalTransfer externalTransfer)
         {
             var webContext = WebOperationContext.Current;
-
+            
             try
             {                
                 var incomingCredentials = webContext.IncomingRequest.Headers[HttpRequestHeader.Authorization];

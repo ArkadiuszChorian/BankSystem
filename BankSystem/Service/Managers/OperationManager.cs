@@ -96,9 +96,11 @@ namespace Service.Managers
 
                 //TODO Needs mapping from BankId to IP
                 //const string pcIp = "192.168.1.11";
-                var externalIp = ConfigurationManager.AppSettings["ExternalIp"];
-                var myOwnBankBaseAdress = "http://" + externalIp + "/BankService/web";
-                var url = myOwnBankBaseAdress + "/accounts/" + operation.DestinationId;
+                //var externalIp = ConfigurationManager.AppSettings["ExternalIp"];
+                //var myOwnBankBaseAdress = "http://" + externalIp + "/BankService/web";
+                var destinationBankId = OperationAnalyzer.AccountAnalyzer.GetBankIdFromAccountId(operation.DestinationId);
+                var externalAddress = DAL.Instance.BankIdToIpMapping[destinationBankId];
+                var url = externalAddress + "/accounts/" + operation.DestinationId;
 
                 var content = new StringContent(externalOperation.ToJson(), Encoding.UTF8, "application/json");
 

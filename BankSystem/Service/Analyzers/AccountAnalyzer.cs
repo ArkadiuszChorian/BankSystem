@@ -15,8 +15,13 @@ namespace Service.Analyzers
         {
             ValidateId(accountId, true);
 
-            return accountId.Substring(2, 8) == ConfigurationManager.AppSettings["BankId"];
-        }      
+            return GetBankIdFromAccountId(accountId) == ConfigurationManager.AppSettings["BankId"];
+        }
+
+        public string GetBankIdFromAccountId(string accountId)
+        {
+            return accountId.Substring(2, 8);
+        }
 
         public bool Validate(Account account)
         {
