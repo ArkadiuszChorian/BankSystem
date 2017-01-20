@@ -2,6 +2,7 @@
 using System.Configuration;
 using System.Net;
 using System.Net.Http;
+using System.Security.Authentication;
 using System.Text;
 using System.Threading.Tasks;
 using Service.Analyzers;
@@ -41,6 +42,10 @@ namespace Service.Managers
                         if (responseCode == HttpStatusCode.Created)
                         {
                             ExecuteOperation(operation.Clone(), sourceAccount, OperationDirections.Expense);
+                        }
+                        else
+                        {
+                            throw new AuthenticationException("Operation has not been executed because of bank problem.");
                         }
                     }
                     else if (destinationAccountIsInternal)
@@ -166,7 +171,9 @@ namespace Service.Managers
 
             account.Balance += (decimal)direction * operation.Amount;
 
-            operation.BalanceAfter = account.Balance;           
+            operation.BalanceAfter = account.Balance; 
+            
+            operation.DateTime = DateTime.Now;          
 
             DAL.Instance.Operations.Add(operation);
 

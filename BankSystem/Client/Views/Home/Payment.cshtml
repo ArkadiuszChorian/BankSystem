@@ -9,9 +9,12 @@
 
     <div>
         <label>Amount</label>
-        <input asp-for="AmountMain" />
+        @*<input asp-for="AmountMain" />
         <input asp-for="AmountReminder" />
-        <span asp-validation-for="AmountReminder"/>
+        <span asp-validation-for="AmountReminder"/>*@
+        <input asp-for="Amount" />
+        <span asp-validation-for="Amount"></span>
+        <span class="field-validation-error">@ViewData["Error"]</span>
     </div>
 
     <div>
@@ -20,4 +23,4 @@
 
 </form>
 
-<p>@ViewData["Error"]</p>
+@*<p>@ViewData["Error"]</p>*@

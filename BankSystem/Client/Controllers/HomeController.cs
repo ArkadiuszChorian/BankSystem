@@ -43,13 +43,19 @@ namespace Client.Controllers
         [HttpPost]
         public async Task<IActionResult> Transfer(string id, TransferViewModel transferViewModel, string returnUrl)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewData["ReturnUrl"] = returnUrl;
+                return View(transferViewModel);
+            }
+
             var bankService = new BankServiceClient();
 
             var operation = new Operation
             {
                 SourceId = id,
                 DestinationId = transferViewModel.DestinationId,
-                Amount = transferViewModel.DecimalAmount(),
+                Amount = transferViewModel.Amount,//.DecimalAmount(),
                 Title = transferViewModel.Title,
                 OperationType = Operation.OperationTypes.Transfer
             };
@@ -69,22 +75,30 @@ namespace Client.Controllers
             return RedirectToAction("Overview");
         }
 
-        public IActionResult Payment(string id)
+        public IActionResult Payment(string id, string returnUrl)
         {
+            ViewData["ReturnUrl"] = returnUrl;
             ViewData["Message"] = "Your contact page.";
             ViewData["Title"] = "Payment";
             //ViewData["Id"] = id;
 
-            return View("Payment");
+            return View();
         }
 
         [HttpPost]
         public async Task<IActionResult> Payment(string id, PaymentViewModel paymentViewModel, string returnUrl)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewData["ReturnUrl"] = returnUrl;
+                ViewData["Title"] = "Payment";
+                return View(paymentViewModel);
+            }
+
             var bankService = new BankServiceClient();
             var operation = new Operation
             {
-                Amount = paymentViewModel.DecimalAmount(),
+                Amount = paymentViewModel.Amount,//.DecimalAmount(),
                 DestinationId = id,
                 OperationType = Operation.OperationTypes.Payment
             };
@@ -117,10 +131,17 @@ namespace Client.Controllers
         [HttpPost]
         public async Task<IActionResult> Withdraw(string id, PaymentViewModel paymentViewModel, string returnUrl)
         {
+            if (!ModelState.IsValid)
+            {
+                ViewData["ReturnUrl"] = returnUrl;
+                ViewData["Title"] = "Withdraw";
+                return View("Payment", paymentViewModel);
+            }
+
             var bankService = new BankServiceClient();
             var operation = new Operation
             {
-                Amount = paymentViewModel.DecimalAmount(),
+                Amount = paymentViewModel.Amount,//.DecimalAmount(),
                 SourceId = id,
                 OperationType = Operation.OperationTypes.Withdraw
             };

@@ -1,5 +1,5 @@
 ﻿body {
-    padding-top: 50px;
+    padding-top: 75px;
     padding-bottom: 20px;
 }
 
@@ -17,22 +17,47 @@ textarea {
     max-width: 280px;
 }
 
-/* Carousel */
-.carousel-caption p {
-    font-size: 20px;
-    line-height: 1.4;
+.account-overview {
+    text-align: center;
 }
 
-/* Make .svg files in the carousel display properly in older browsers */
-.carousel-inner .item img[src$=".svg"]
-{
-    width: 100%;
+.account-info {
+    margin-bottom: 20px;
 }
 
-/* Hide/rearrange for smaller screens */
-@media screen and (max-width: 767px) {
-  /* Hide captions */
-  .carousel-caption {
-    display: none
-  }
+label {
+    margin: 10px !important;
 }
+
+.button, input[type = "submit"] {
+    background: #2a76a8;
+    background-image: -webkit-linear-gradient(top, #2a76a8, #0d2838);
+    background-image: -moz-linear-gradient(top, #2a76a8, #0d2838);
+    background-image: -ms-linear-gradient(top, #2a76a8, #0d2838);
+    background-image: -o-linear-gradient(top, #2a76a8, #0d2838);
+    background-image: linear-gradient(to bottom, #2a76a8, #0d2838);
+    -webkit-border-radius: 28;
+    -moz-border-radius: 28;
+    border-radius: 28px;
+    font-family: Arial;
+    color: #ffffff;
+    font-size: 14px;
+    padding: 10px 20px 10px 20px;
+    text-decoration: none;
+    border-width: 0px;
+    margin-top: 10px;
+    margin-bottom: 10px;
+    /*border-style: outset;
+    border-color: buttonface;
+    border-image: initial;*/
+}
+
+.button:hover, input[type = "submit"]:hover {
+    background: #3cb0fd;
+    background-image: -webkit-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -moz-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -ms-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: -o-linear-gradient(top, #3cb0fd, #3498db);
+    background-image: linear-gradient(to bottom, #3cb0fd, #3498db);
+    text-decoration: none;
+}        

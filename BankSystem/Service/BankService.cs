@@ -98,6 +98,10 @@ namespace Service
         {
             try
             {
+                if (operation.DestinationId == operation.SourceId)
+                {
+                    throw new FaultException("Cannot transfer to yourself.");
+                }
                 await OperationManager.ExecuteOperation(operation);
             }
             catch (Exception exception)

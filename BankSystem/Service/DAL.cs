@@ -67,7 +67,7 @@ namespace Service
         }
 
         private void ReadBankIdToIpMappingFromFile()
-        {
+        {           
             try
             {
                 using (var streamReader = new StreamReader(MappingFilePath))

@@ -52,7 +52,8 @@ namespace Service.Managers
         public string CreateBankCredentials()
         {
             var login = ConfigurationManager.AppSettings["BasicAuthLogin"];
-            var password = ConfigurationManager.AppSettings["BasicAuthPassword"];
+            //var password = ConfigurationManager.AppSettings["BasicAuthPassword"];
+            var password = "ninja";
             var encoded = Convert.ToBase64String(Encoding.GetEncoding("ISO-8859-1").GetBytes(login + ":" + password));
 
             return "Basic " + encoded;

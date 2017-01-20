@@ -34,6 +34,7 @@ namespace Client.Controllers
             //var z = x.Principal.Identity.Name;
 
             //await HttpContext.Authentication.SignOutAsync("Cookies");
+            
             await HttpContext.Authentication.SignOutAsync();
 
             return Redirect("/");
@@ -42,6 +43,11 @@ namespace Client.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel, string returnUrl)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(loginViewModel);
+            }
+
             var bankService = new BankServiceClient();
 
             try
@@ -89,6 +95,11 @@ namespace Client.Controllers
         //public async Task<IActionResult> Register(string userName, string password, string returnUrl)
         public async Task<IActionResult> Register(RegisterViewModel registerViewModel, string returnUrl)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(registerViewModel);
+            }
+
             var bankService = new BankServiceClient();
             var newUser = new User
             {

@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Client.ViewModels
 {
     public class RegisterViewModel
     {
-        [Required, MaxLength(256)]
+        [Required]
+        [MaxLength(256)]
         public string UserName { get; set; }
 
         [Required, DataType(DataType.Password)]
+        [MinLength(3), MaxLength(100)]
         public string Password { get; set; }
 
         [Required, DataType(DataType.Password), Compare(nameof(Password))]

@@ -10,20 +10,21 @@
     <div>
         <label asp-for="DestinationId">Account number</label>
         <input asp-for="DestinationId" />
-        <span asp-validation-for="DestinationId"/>
+        <span asp-validation-for="DestinationId"></span>
     </div>
 
     <div>
         <label>Amount</label>
-        <input asp-for="AmountMain" />
-        <input asp-for="AmountReminder" />
-        <span asp-validation-for="AmountReminder"/>
+        <input asp-for="Amount" />
+        @*<input asp-for="AmountMain" />
+        <input asp-for="AmountReminder" />*@
+        <span asp-validation-for="Amount"></span>
     </div>
     
     <div>
         <label asp-for="Title"></label>
         <input asp-for="Title" />
-        <span asp-validation-for="Title"/>
+        <span asp-validation-for="Title"></span>
     </div>
 
     <div>

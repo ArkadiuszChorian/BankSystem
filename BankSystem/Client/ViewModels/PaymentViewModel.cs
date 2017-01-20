@@ -1,24 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Client.ViewModels
 {
     public class PaymentViewModel
     {
-        public int AmountMain { get; set; }
-
-        [Range(0, 99)]
-        public int AmountReminder { get; set; }
-
-        public decimal DecimalAmount()
-        {
-            var main = (decimal) AmountMain;
-            var reminder = (decimal) AmountReminder;
-
-            return main + reminder / 100;
-        }
+        [Required]
+        [Range(0.01, 9999999999999999.99, ErrorMessage = "Invalid amount (min = 0.01, max = 16 digits)")]
+        [RegularExpression(@"^\d+.?\d{0,2}$", ErrorMessage = "Invalid amount (max two decimal points)")]       
+        public decimal Amount { get; set; }
     }
 }

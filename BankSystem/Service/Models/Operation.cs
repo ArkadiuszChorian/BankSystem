@@ -29,8 +29,9 @@ namespace Service.Models
         public string Id { get; set; }
         [DataMember]
         public string Title { get; set; }
+
         [DataMember]
-        public DateTime DateTime { get; set; }
+        public DateTime DateTime { get; set; } = DateTime.Now;
         [DataMember]
         public string SourceId { get; set; }
         [DataMember]

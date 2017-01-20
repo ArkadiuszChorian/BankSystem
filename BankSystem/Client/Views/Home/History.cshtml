@@ -6,10 +6,55 @@
 @{
     var operations = (List<Operation>)Model;
 
+    if (operations.Count == 0)
+    {
+        <p>History is empty</p>
+    }
+
     foreach (var operation in operations)
     {
-        <div>
-            Kwota: @operation.Amount, Od: @operation.SourceId, Do: @operation.DestinationId, Title: @operation.Title
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div class="account-overview">
+                    <div class="account-info">
+                        <p>Amount: @operation.Amount</p>
+                        @{
+                            if (string.IsNullOrEmpty(operation.SourceId))
+                            {
+                                <p>From: Payment</p>
+                            }
+                            else
+                            {
+                                <p>From: @operation.SourceId</p>
+                            }
+                            if (string.IsNullOrEmpty(operation.DestinationId))
+                            {
+                                <p>To: Withdraw</p>
+                            }
+                            else
+                            {
+                                <p>To: @operation.DestinationId</p>
+                            }
+                            if (string.IsNullOrEmpty(operation.Title))
+                            {
+                                if (string.IsNullOrEmpty(operation.SourceId))
+                                {
+                                    <p>Title: Payment</p>
+                                }
+                                else
+                                {
+                                    <p>Title: Withdraw</p>
+                                }
+                            }
+                            else
+                            {
+                                <p>Title: @operation.Title</p>
+                            }
+                        }                                            
+                        <p>DateTime: @operation.DateTime</p>
+                    </div>
+                </div>
+            </div>
         </div>
     }
 }
