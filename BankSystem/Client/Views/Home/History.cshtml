@@ -18,7 +18,10 @@
                 <div class="account-overview">
                     <div class="account-info">
                         <p>Amount: @operation.Amount</p>
-                        @{
+                        <p>From: @operation.SourceId</p>
+                        <p>To: @operation.DestinationId</p>
+                        <p>Title: @operation.Title</p>
+                        @*@{
                             if (string.IsNullOrEmpty(operation.SourceId))
                             {
                                 <p>From: Payment</p>
@@ -50,7 +53,7 @@
                             {
                                 <p>Title: @operation.Title</p>
                             }
-                        }                                            
+                        }*@                                            
                         <p>DateTime: @operation.DateTime</p>
                     </div>
                 </div>

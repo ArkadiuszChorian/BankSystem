@@ -5,8 +5,17 @@ using Service.Analyzers;
 
 namespace Service.Generators
 {
+    /// <summary>
+    /// Class for generating accounts ids
+    /// </summary>
     public class AccountIdGenerator : IIdGenerator
     {
+        /// <summary>
+        /// Generates new account id
+        /// </summary>
+        /// <param name="container"></param>
+        /// <param name="document"></param>
+        /// <returns></returns>
         public object GenerateId(object container, object document)
         {
             var currentAccountIdConfigKeyValue = DAL.Instance.Configurations.First(config => config.Key == "CurrentAccountId");
@@ -29,7 +38,11 @@ namespace Service.Generators
 
             return fullAccountId;
         }
-
+        /// <summary>
+        /// Checks if given id is empty
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public bool IsEmpty(object id)
         {
             return string.IsNullOrEmpty(id?.ToString());

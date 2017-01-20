@@ -1,16 +1,16 @@
-﻿using System.Net.Http;
-using System.ServiceModel;
+﻿using System.ServiceModel;
 using System.ServiceModel.Web;
 using System.Threading.Tasks;
 using Service.Models;
 
 namespace Service
 {
-    // NOTE: You can use the "Rename" command on the "Refactor" menu to change the interface name "IBankService" in both code and config file together.
+    /// <summary>
+    /// Service interface for REST API
+    /// </summary>
     [ServiceContract]
     public interface IBankServiceWeb
     {      
-        //======= Service - Service (REST) 
         [OperationContract]
         [WebInvoke(Method = "POST", UriTemplate = "/accounts/{id}", RequestFormat = WebMessageFormat.Json, ResponseFormat = WebMessageFormat.Json, BodyStyle = WebMessageBodyStyle.WrappedResponse)]
         Task<string> ReceiveExternalTransfer(string id, ExternalTransfer externalTransfer);

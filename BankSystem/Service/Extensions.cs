@@ -5,13 +5,19 @@ using Service.Models;
 
 namespace Service
 {
+    /// <summary>
+    /// Static class providing some common extensions
+    /// </summary>
     public static class Extensions
     {
+        /// <summary>
+        /// Checks if string is encoded in base64
+        /// </summary>
         public static bool IsBase64Encoded(this string str)
         {
             try
             {
-                var bytes = Convert.FromBase64String(str);
+                Convert.FromBase64String(str);
                 return true;
             }
             catch
@@ -20,6 +26,9 @@ namespace Service
             }
         }
 
+        /// <summary>
+        /// Method gets destination account form repository
+        /// </summary>
         public static Account GetDestinationAccount(this MongoRepository<Account, string> repository, string accountId)
         {
             Account resultAccount;
@@ -35,6 +44,9 @@ namespace Service
             return resultAccount;
         }
 
+        /// <summary>
+        /// Method gets source account form repository
+        /// </summary>
         public static Account GetSourceAccount(this MongoRepository<Account, string> repository, string accountId)
         {
             Account resultAccount;

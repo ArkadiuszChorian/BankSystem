@@ -8,21 +8,33 @@ using Service.Models;
 
 namespace Service.Managers
 {
+    /// <summary>
+    /// Class for managing authentication
+    /// </summary>
     public class AuthenticationManager
     {
-        public SessionIdGenerator SessionIdGenerator { get; set; } = new SessionIdGenerator();
+        private SessionIdGenerator _sessionIdGenerator = new SessionIdGenerator();
 
+        /// <summary>
+        /// Creates session from given user name
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <returns>String representing id of created session</returns>
         public string CreateSession(string userName)
         {
             var user = DAL.Instance.Users.First(user2 => user2.UserName == userName);
-            var session = new Session(SessionIdGenerator.GenerateId(), user.Id);
+            var session = new Session(_sessionIdGenerator.GenerateId(), user.Id);
             DAL.Instance.Sessions.Add(session);
             user.Sessions.Add(session.Id);
             DAL.Instance.Users.Update(user);
 
             return session.SessionId;
         }
-
+        /// <summary>
+        /// Checks if bank with given credentials is authenticated
+        /// </summary>
+        /// <param name="encodedCredentials"></param>
+        /// <returns></returns>
         public bool CheckBankCredentials(string encodedCredentials)
         {
             if (string.IsNullOrEmpty(encodedCredentials))
@@ -48,7 +60,10 @@ namespace Service.Managers
             return loginPasswordArray[0] == ConfigurationManager.AppSettings["BasicAuthLogin"] &&
                    loginPasswordArray[1] == ConfigurationManager.AppSettings["BasicAuthPassword"];
         }
-
+        /// <summary>
+        /// Creates new bank credentials
+        /// </summary>
+        /// <returns></returns>
         public string CreateBankCredentials()
         {
             var login = ConfigurationManager.AppSettings["BasicAuthLogin"];
@@ -58,7 +73,12 @@ namespace Service.Managers
 
             return "Basic " + encoded;
         }
-
+        /// <summary>
+        /// Checks user credentials
+        /// </summary>
+        /// <param name="userName"></param>
+        /// <param name="password"></param>
+        /// <returns></returns>
         public bool ChceckUserCredentials(string userName, string password)
         {
             try
@@ -77,7 +97,11 @@ namespace Service.Managers
 
             return true;
         }
-
+        /// <summary>
+        /// Gets user from given session id
+        /// </summary>
+        /// <param name="sessionId"></param>
+        /// <returns></returns>
         public User GetUserFromSessionId(string sessionId)
         {
             var session = DAL.Instance.Sessions.Single(session2 => session2.SessionId == sessionId);

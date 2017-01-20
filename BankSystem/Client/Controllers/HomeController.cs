@@ -17,16 +17,13 @@ namespace Client.Controllers
         {
             var bankService = new BankServiceClient();
             var sessionId = await HttpContext.Authentication.GetSessionId();
-            //Todo
-            //Get accounts!
             var accounts = await bankService.GetAccountsAsync(sessionId);
 
             return View(accounts);
         }
         public async Task<IActionResult> History(string id)
         {
-            var bankService = new BankServiceClient();
-            //var userName = HttpContext.Authentication.GetSessionId();      
+            var bankService = new BankServiceClient();     
             var operations = await bankService.GetAccountHistoryAsync(id);
 
             return View(operations);
@@ -35,7 +32,6 @@ namespace Client.Controllers
         public IActionResult Transfer(string id)
         {
             ViewData["Message"] = "Transfer page.";
-            //ViewData["Id"] = id;
 
             return View();
         }
@@ -55,12 +51,11 @@ namespace Client.Controllers
             {
                 SourceId = id,
                 DestinationId = transferViewModel.DestinationId,
-                Amount = transferViewModel.Amount,//.DecimalAmount(),
+                Amount = transferViewModel.Amount,
                 Title = transferViewModel.Title,
                 OperationType = Operation.OperationTypes.Transfer
             };
-
-            //var result = await bankService.TransferAsync(operation);
+            
             try
             {
                 await bankService.ExecuteOperationAsync(operation);
@@ -80,7 +75,6 @@ namespace Client.Controllers
             ViewData["ReturnUrl"] = returnUrl;
             ViewData["Message"] = "Your contact page.";
             ViewData["Title"] = "Payment";
-            //ViewData["Id"] = id;
 
             return View();
         }
@@ -98,12 +92,13 @@ namespace Client.Controllers
             var bankService = new BankServiceClient();
             var operation = new Operation
             {
-                Amount = paymentViewModel.Amount,//.DecimalAmount(),
+                Amount = paymentViewModel.Amount,
                 DestinationId = id,
+                SourceId = "Payment",
+                Title = "Payment",
                 OperationType = Operation.OperationTypes.Payment
             };
 
-            //var result = await bankService.PaymentAsync(operation);
             try
             {
                 await bankService.ExecuteOperationAsync(operation);
@@ -123,7 +118,6 @@ namespace Client.Controllers
         {
             ViewData["Message"] = "Your contact page.";
             ViewData["Title"] = "Withdraw";
-            //ViewData["Id"] = id;
 
             return View("Payment");
         }
@@ -141,13 +135,13 @@ namespace Client.Controllers
             var bankService = new BankServiceClient();
             var operation = new Operation
             {
-                Amount = paymentViewModel.Amount,//.DecimalAmount(),
+                Amount = paymentViewModel.Amount,
                 SourceId = id,
+                DestinationId = "Withdraw",
+                Title = "Withdraw",
                 OperationType = Operation.OperationTypes.Withdraw
             };
-
-            //var result = await bankService.PaymentAsync(operation);
-
+            
             try
             {
                 await bankService.ExecuteOperationAsync(operation);

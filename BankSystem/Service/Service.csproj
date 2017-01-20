@@ -74,10 +74,8 @@
     <Compile Include="Models\ConfigKeyValue.cs" />
     <Compile Include="IBankService.cs" />
     <Compile Include="Models\Operation.cs" />
-    <Compile Include="Models\Payment.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="BankService.cs" />
-    <Compile Include="Models\Transfer.cs" />
     <Compile Include="Models\User.cs" />
     <Compile Include="Analyzers\AccountAnalyzer.cs" />
     <Compile Include="Generators\SessionIdGenerator.cs" />

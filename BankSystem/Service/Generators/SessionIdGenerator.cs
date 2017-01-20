@@ -2,8 +2,15 @@
 
 namespace Service.Generators
 {
+    /// <summary>
+    /// Class for generating sessions ids
+    /// </summary>
     public class SessionIdGenerator
     {
+        /// <summary>
+        /// Generates new session id
+        /// </summary>
+        /// <returns></returns>
         public string GenerateId()
         {
             var currentSessionIdConfigKeyValue = DAL.Instance.Configurations.First(config => config.Key == "CurrentSessionId");

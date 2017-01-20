@@ -534,7 +534,7 @@ namespace BankService
         {
             if ((endpointConfiguration == EndpointConfiguration.BasicHttpBinding_IBankService))
             {
-                return new System.ServiceModel.EndpointAddress("http://150.254.131.76:8080/service");
+                return new System.ServiceModel.EndpointAddress("http://localhost:8733/service");
             }
             throw new System.InvalidOperationException(string.Format("Could not find endpoint with name \'{0}\'.", endpointConfiguration));
         }
